@@ -1,0 +1,164 @@
+<!--
+ * @Description: 
+ * @Version: 1.0
+ * @Author: DaLao
+ * @Email: dalao_li@163.com
+ * @Date: 2021-12-31 08:08:19
+ * @LastEditors: DaLao
+ * @LastEditTime: 2022-01-01 01:29:33
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
+    <script src="{{ url_for('static',filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='bootstrap.min.js') }}"></script>
+</head>
+
+<body>
+    <ul class="breadcrumb">
+        <li class="active">开始抽签/</li>
+        <li><a href="/data">导入数据/</a></li>
+        <li><a href="/log">抽签记录</a></li>
+    </ul>
+
+    <div class="container">
+        <form id="addForm" action="" onsubmit="return false;">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">事项名称</span>
+                </div>
+                <label for="name"></label>
+                <input type="text" class="form-control" id="name" name="name" required />
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">受理时间</span>
+                </div>
+                <label for="date"></label>
+                <input type="datetime-local" class="form-control" id="time" name="time" />
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">申请单位</span>
+                </div>
+                <label for="name"></label>
+                <input type="text" class="form-control" id="department" name="department" />
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">联系人</span>
+                </div>
+                <label for="name"></label>
+                <input type="text" class="form-control" id="people" name="people" />
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">专家评审内容</span>
+                </div>
+                <label for="name"></label>
+                <textarea class="form-control" rows="3" id="word1" name="word1"></textarea>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">评审专家、领域等事项</span>
+                </div>
+                <label for="name"></label>
+                <textarea class="form-control" rows="3" id="word2" name="word2"></textarea>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">组织时间</span>
+                </div>
+                <label for="name"></label>
+                <input type="datetime-local" class="form-control" id="startTime" name="startTime" placeholder="开始时间">
+                <input type="datetime-local" class="form-control" id="endTime" name="endTime" placeholder="结束时间"
+                    value="local">
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">人员分类</span>
+                </div>
+                <select class="form-control" name="identify">
+                    <option value="水务类">水务类</option>
+                    <option value="工程消费类">工程消费类</option>
+                    <option value="卫生健康类">卫生健康类</option>
+                    <option value="食品药品类">食品药品类</option>
+                    <option value="项目评审类">项目评审类</option>
+                    <option value="农业类">农业类</option>
+                    <option value="交通类">交通类</option>
+                    <option value="教育类">教育类</option>
+                    <option value="电力类">电力类</option>
+                    <option value="工业类">工业类</option>
+                    <option value="化工类">化工类</option>
+                    <option value="能源类">能源类</option>
+                    <option value="市政燃气类">市政燃气类</option>
+                    <option value="文物保护、勘探类">文物保护、勘探类</option>
+                    <option value="环境保护、节能审查类">环境保护、节能审查类</option>
+                </select>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">抽签人数</span>
+                </div>
+                <input type="number" class="form-control" id="sum" name="sum" value="3" min="3" max="5" />
+            </div>
+
+            <div class="input-group mb-3">
+                <button type="button" class="btn btn-success" onclick="start()">开始抽签</button>
+                <button type="button" class="btn btn-danger" id="clear">清空</button>
+            </div>
+        </form>
+
+
+        <div class="alert alert-success" id="result"><span>抽签结果:</span></div>
+    </div>
+</body>
+
+<script>
+    function start() {
+        const data = {}
+        const t = $('#addForm').serializeArray()
+        $.each(t, function () {
+            data[this.name] = this.value
+        })
+        console.log(data)
+        sendAjax('post', '/add', data, (result) => {
+            document.getElementById('result').innerText = '抽签结果:' + result
+        })
+
+    }
+
+
+    function sendAjax(type, url, param, callback) {
+        $.ajax({
+            async: false,
+            ache: false,
+            type: type,
+            url: url,
+            //将发送的数据转换为JSON字符串
+            data: JSON.stringify(param),
+            //服务端返回数据的格式
+            dataType: "json",
+            success: function (result) {
+                callback(result);
+            },
+            error: function () {
+                //失败处理
+            },
+        });
+    }
+</script>
+
+</html>
