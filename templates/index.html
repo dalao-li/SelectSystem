@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-01 17:06:31
+ * @LastEditTime: 2022-01-02 01:46:47
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -112,7 +112,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">抽签人数</span>
                 </div>
-                <select class="form-control" name="identify">
+                <select class="form-control" name="sum">
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
@@ -137,7 +137,6 @@
         $.each(t, function () {
             d[this.name] = this.value
         })
-        // console.log(data)
         sendAjax('post', '/add', d, (data) => {
             const code = data.code
             if (code == -1) {

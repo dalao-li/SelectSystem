@@ -9,7 +9,7 @@ LastEditTime: 2021-12-31 22:40:15
 '''
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Integer, DateTime
+from sqlalchemy import Column, String
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
