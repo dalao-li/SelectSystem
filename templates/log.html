@@ -5,11 +5,12 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2021-12-31 13:30:24
+ * @LastEditTime: 2022-01-01 17:03:37
 -->
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -17,25 +18,26 @@
     <script src="{{ url_for('static',filename='jquery.min.js') }}"></script>
     <script src="{{ url_for('static',filename='bootstrap.min.js') }}"></script>
 </head>
+
 <body>
     <ul class="breadcrumb">
         <li><a href="/">开始抽签</a>/</li>
         <li><a href="/data">导入数据</a>/</li>
         <li class="active">抽签记录</a></li>
     </ul>
-    
+
     <table class="table table-hover" id="infoTable">
         <thead>
-        <tr>
-            <th>提交状态</th>
-            <th>学号</th>
-            <th>姓名</th>
-            <th>上传时间</th>
-            <th>操作</th>
-        </tr>
+            <tr>
+                <th>时间</th>
+                <th>类别</th>
+                <th>人数</th>
+                <th>名单</th>
+                <th>操作</th>
+            </tr>
         </thead>
         <tbody>
-        
+
         </tbody>
 </body>
 <script>
@@ -54,4 +56,5 @@
         search: true,
     })
 </script>
+
 </html>
