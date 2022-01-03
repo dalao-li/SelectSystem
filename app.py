@@ -39,5 +39,16 @@ def add():
     return a
 
 
+@app.route('/upload', methods=['POST'])
+def upload():
+    f = request.files['file']
+    format = f.filename.split('.')[1]
+    # 处理excel
+    if format in ['xls', 'xlsx']:
+        read_excel(f)
+        return {'code': 1}
+    return {'code': -1}
+
+
 if __name__ == '__main__':
     app.run()

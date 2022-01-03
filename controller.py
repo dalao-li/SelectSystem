@@ -16,6 +16,9 @@ def get_random_id() -> str:
     return ''.join(random.sample(a, 10))
 
 
+def read_excel(f):
+    pass
+
 def add_log(data: dict) -> dict:
     name, time, department, people, word1, word2, start_time, end_time, identify, s = data.values()
 

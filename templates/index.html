@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-02 01:46:47
+ * @LastEditTime: 2022-01-03 10:29:13
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -137,6 +137,9 @@
         $.each(t, function () {
             d[this.name] = this.value
         })
+        for (i in d) {
+            console.log(i, d[i])
+        }
         sendAjax('post', '/add', d, (data) => {
             const code = data.code
             if (code == -1) {

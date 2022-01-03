@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 12:44:48
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-01 16:54:45
+ * @LastEditTime: 2022-01-03 11:16:00
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +37,7 @@
         </div>
 
         <div class="input-group mb-3">
-            <button type="button" onclick="" class="btn btn-primary">提交</button>
+            <button type="button" onclick="upload()" class="btn btn-primary">提交</button>
         </div>
 
         <div>
@@ -61,6 +61,40 @@
 
 </body>
 <script>
+    function upload() {
+        const f = document.getElementById("file").files[0]
+        if (!f) {
+            alert("请选择上传文件")
+            return
+        }
+        var form = new FormData()
+        form.append("file", f)
+        $.ajax({
+            async: false,
+            type: "POST",
+            url: "/upload",
+            data: form,
+            dataType: "JSON",
+            mimeType: "multipart/form-data",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                if (data.code == 1) {
+                    alert("上传成功")
+                    location.reload()
+                }
+                if (data.code == -1) {
+                    alert("上传文件不是Excel文件!请重试")
+                }
+            },
+            error: function () {
+                alert("网络异常，请稍后重试")
+            }
+        })
+    }
+
+
     $('#infoTable').bootstrapTable({
         //是否显示分页条
         pagination: true,
