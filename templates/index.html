@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-03 10:29:13
+ * @LastEditTime: 2022-01-06 23:13:08
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -137,7 +137,7 @@
         $.each(t, function () {
             d[this.name] = this.value
         })
-        for (i in d) {
+        for (const i in d) {
             console.log(i, d[i])
         }
         sendAjax('post', '/add', d, (data) => {
@@ -158,9 +158,9 @@
             ache: false,
             type: type,
             url: url,
-            //将发送的数据转换为JSON字符串
+            // 将发送的数据转换为JSON字符串
             data: JSON.stringify(param),
-            //服务端返回数据的格式
+            // 服务端返回数据的格式
             dataType: "json",
             success: function (data) {
                 callback(data);
