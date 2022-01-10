@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 12:44:48
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-03 11:16:00
+ * @LastEditTime: 2022-01-10 12:54:30
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -54,6 +54,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for i in data %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.sex }}</td>
+                        <td>{{ i.department }}</td>
+                        <td>{{ i.rank }}</td>
+                        <td>{{ i.phone }}</td>
+                        <td>{{ i.identify }}</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

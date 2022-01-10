@@ -5,20 +5,58 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-10 11:29:12
+LastEditTime: 2022-01-10 12:48:45
 '''
 
 import random
+import pandas as pd
 from models import *
 
 
 def get_random_id() -> str:
     a = 'abcdefghijklmnopqrstuvwxyz123456'
-    return ''.join(random.sample(a, 10))
+    return ''.join(random.sample(a, 32))
 
 
 def read_excel(f):
-    pass
+    format = f.filename.split('.')[1]
+    # 处理excel
+    if format not in ['xls', 'xlsx']:
+        return {'code': -1}
+    df = pd.read_excel(f.filename, sheet_name='Sheet1')
+    a = []
+    for i in df.values:
+        p = People(
+            id=get_random_id(),
+            name=i[0],
+            sex=i[1],
+            human_id=i[2],
+            school=i[3],
+            department=i[4],
+            rank=i[5],
+            rank_id=i[6],
+            professional1=i[7],
+            professional2=i[8],
+            professional3=i[9],
+            professional4=i[10],
+            professional5=i[11],
+            phone=i[12],
+            email=i[13],
+            identify=i[14]
+        )
+        a.append(p)
+    try:
+        session.query(People).delete()
+        session.commit()
+        session.close()
+    except:
+        session.rollback()
+    
+    session.add_all(a)
+    session.commit()
+    session.close()
+    return {'code': 1}
+
 
 def add_log(data: dict) -> dict:
     name, time, department, people, word1, word2, start_time, end_time, identify, s = data.values()
@@ -41,8 +79,20 @@ def add_log(data: dict) -> dict:
         r += (p[i].name + '; ')
 
     # 添加记录
-    log = Log(id=get_random_id(), name=name, time=time, department=department, people=people, word1=word1, word2=word2,
-              startTime=start_time, endTime=end_time, identify=identify, sum=s, human=r)
+    log = Log(
+        id=get_random_id(),
+        name=name, 
+        time=time, 
+        department=department, 
+        people=people, 
+        word1=word1, 
+        word2=word2,
+        startTime=start_time, 
+        endTime=end_time, 
+        identify=identify, 
+        sum=s, 
+        human=r
+    )
     session.add(log)
     session.commit()
     session.close()

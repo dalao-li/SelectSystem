@@ -5,17 +5,9 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-10 11:36:04
+LastEditTime: 2022-01-10 12:52:10
 '''
-"""
-Description:
-Version: 1.0
-Author: DaLao
-Email: dalao_li@163.com
-Date: 2021-12-31 08:07:06
-LastEditors: DaLao
-LastEditTime: 2022-01-02 01:30:07
-"""
+
 import json
 
 from flask import Flask, render_template, request
@@ -26,17 +18,18 @@ app = Flask(__name__)
 
 
 @app.route('/', methods=['GET'])
-def hello_world():
+def index_page():
     return render_template('index.html')
 
 
 @app.route('/data', methods=['GET'])
-def data():
-    return render_template('data.html')
+def data_page():
+    data = get_people()
+    return render_template('data.html', data = data)
 
 
 @app.route('/log', methods=['GET'])
-def log():
+def log_page():
     data = get_log()
     return render_template('log.html', log = data)
 
@@ -50,12 +43,7 @@ def add():
 @app.route('/upload', methods=['POST'])
 def upload():
     f = request.files['file']
-    format = f.filename.split('.')[1]
-    # 处理excel
-    if format in ['xls', 'xlsx']:
-        read_excel(f)
-        return {'code': 1}
-    return {'code': -1}
+    return read_excel(f)
 
 
 if __name__ == '__main__':
