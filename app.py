@@ -1,3 +1,12 @@
+'''
+Description: 
+Version: 1.0
+Author: DaLao
+Email: dalao_li@163.com
+Date: 2022-01-10 10:38:26
+LastEditors: DaLao
+LastEditTime: 2022-01-10 11:36:04
+'''
 """
 Description:
 Version: 1.0
@@ -22,23 +31,22 @@ def hello_world():
 
 
 @app.route('/data', methods=['GET'])
-def get_data():
+def data():
     return render_template('data.html')
 
 
 @app.route('/log', methods=['GET'])
-def get_log():
-    return render_template('log.html')
+def log():
+    data = get_log()
+    return render_template('log.html', log = data)
 
-
+# 抽签
 @app.route('/add', methods=['POST'])
 def add():
     data = json.loads(request.get_data())
-    a = add_log(data)
-    print(a)
-    return a
+    return add_log(data)
 
-
+# 上传文件
 @app.route('/upload', methods=['POST'])
 def upload():
     f = request.files['file']
@@ -51,4 +59,4 @@ def upload():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

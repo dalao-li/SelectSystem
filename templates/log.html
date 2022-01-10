@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-01 17:03:37
+ * @LastEditTime: 2022-01-10 11:39:26
 -->
 
 <!DOCTYPE html>
@@ -25,20 +25,30 @@
         <li><a href="/data">导入数据</a>/</li>
         <li class="active">抽签记录</a></li>
     </ul>
-
-    <table class="table table-hover" id="infoTable">
-        <thead>
-            <tr>
-                <th>时间</th>
-                <th>类别</th>
-                <th>人数</th>
-                <th>名单</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
+    <div class="container">
+        <table class="table table-hover" id="infoTable">
+            <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>类别</th>
+                    <th>人数</th>
+                    <th>名单</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in log %}
+                <tr>
+                    <td>{{ i.time }}</td>
+                    <td>{{ i.identify }}</td>
+                    <td>{{ i.sum }}</td>
+                    <td>{{ i.human }}</td>
+                    <td><button type="button" class="btn btn-success" onclick="">下载</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 <script>
     $('#infoTable').bootstrapTable({

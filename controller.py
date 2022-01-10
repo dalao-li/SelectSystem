@@ -5,8 +5,9 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-02 02:10:59
+LastEditTime: 2022-01-10 11:29:12
 '''
+
 import random
 from models import *
 
@@ -46,3 +47,10 @@ def add_log(data: dict) -> dict:
     session.commit()
     session.close()
     return {'code': code, 'result': r}
+
+
+def get_log():
+    return session.query(Log).all()
+    
+def get_people():
+    return session.query(People).all()
