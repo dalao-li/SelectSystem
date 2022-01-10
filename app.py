@@ -5,12 +5,12 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-10 16:33:09
+LastEditTime: 2022-01-11 00:11:38
 '''
 
 import json
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, send_from_directory, request
 
 from controller import *
 
@@ -45,6 +45,12 @@ def upload():
     f = request.files['file']
     return read_excel(f)
 
+
+@app.route('/download/<id>', methods=['GET'])
+def download(id):
+    print(id)
+    download_log(id)
+    return send_from_directory('static/data', id + ".xls")
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-10 18:57:43
+LastEditTime: 2022-01-11 00:13:10
 '''
 
 import random
@@ -102,10 +102,23 @@ def add_log(data: dict) -> dict:
 # 下载抽签记录
 def download_log(id : str):
     log = session.query(Log).filter(Log.id == id)
+    print(log)
     e = xlwt.Workbook()
-    e.add_sheet("Sheet1")
-    e.save("记录.xlsx")
+    s = e.add_sheet("Sheet1")
+    e.save("static/data/" + id + ".xls")
     # 写入表格
+    s.write(0,0,'名称')
+    s.write(0,1,'时间')
+    s.write(0,2,'类别')
+    s.write(0,3,'人数')
+    s.write(0,4,'名单')
+
+    s.write(1,0,log.name)
+    s.write(1,1,log.time)
+    s.write(1,2,log.identify)
+    s.write(1,3,log.sum)
+    s.write(1,4,log.human)
+   
 
 def get_log():
     return session.query(Log).all()
