@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-10 12:52:10
+LastEditTime: 2022-01-10 16:33:09
 '''
 
 import json
@@ -31,7 +31,7 @@ def data_page():
 @app.route('/log', methods=['GET'])
 def log_page():
     data = get_log()
-    return render_template('log.html', log = data)
+    return render_template('log.html', data = data)
 
 # 抽签
 @app.route('/add', methods=['POST'])

@@ -5,11 +5,12 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-10 12:48:45
+LastEditTime: 2022-01-10 18:57:43
 '''
 
 import random
 import pandas as pd
+import xlwt
 from models import *
 
 
@@ -57,7 +58,7 @@ def read_excel(f):
     session.close()
     return {'code': 1}
 
-
+# 添加抽签记录
 def add_log(data: dict) -> dict:
     name, time, department, people, word1, word2, start_time, end_time, identify, s = data.values()
 
@@ -98,6 +99,13 @@ def add_log(data: dict) -> dict:
     session.close()
     return {'code': code, 'result': r}
 
+# 下载抽签记录
+def download_log(id : str):
+    log = session.query(Log).filter(Log.id == id)
+    e = xlwt.Workbook()
+    e.add_sheet("Sheet1")
+    e.save("记录.xlsx")
+    # 写入表格
 
 def get_log():
     return session.query(Log).all()
