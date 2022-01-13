@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-11 00:14:54
+ * @LastEditTime: 2022-01-13 22:34:20
 -->
 
 <!DOCTYPE html>
@@ -15,8 +15,10 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap-table.min.css') }}">
     <script src="{{ url_for('static',filename='jquery.min.js') }}"></script>
     <script src="{{ url_for('static',filename='bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='bootstrap-table.min.js') }}"></script>
 </head>
 
 <body>
@@ -26,33 +28,85 @@
         <li class="active">抽签记录</a></li>
     </ul>
     <div class="container">
-        <table class="table table-hover" id="infoTable">
-            <thead>
-                <tr>
-                    <th>名称</th>
-                    <th>时间</th>
-                    <th>类别</th>
-                    <th>人数</th>
-                    <th>名单</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for i in data %}
-                <tr>
-                    <td>{{ i.name }}</td>
-                    <td>{{ i.time }}</td>
-                    <td>{{ i.identify }}</td>
-                    <td>{{ i.sum }}</td>
-                    <td>{{ i.human }}</td>
-                    <td><button type="button" class="btn btn-success" onclick="">下载</button></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="input-group mb-3">
+            <button type="button" onclick="clear()" class="btn btn-primary">清空</button>
+        </div>
+        <div>
+            <table class="table table-hover" id="infoTable">
+                <thead>
+                    <tr>
+                        <th>名称</th>
+                        <th>时间</th>
+                        <th>类别</th>
+                        <th>人数</th>
+                        <th>名单</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data %}
+                    <tr>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.time }}</td>
+                        <td>{{ i.identify }}</td>
+                        <td>{{ i.sum }}</td>
+                        <td>{{ i.human }}</td>
+                        <td><button type="button" class="btn btn-success" id="{{ i.id }}" onclick=download()>下载</button>
+                            <button type="button" class="btn btn-success" id="{{ i.id }}" onclick=del()>删除</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
+
+<script src="{{ url_for('static',filename='bootstrap-table-zh-CN.min.js') }}"></script>
 <script>
+    function download() {
+        const t = {
+            'id': event.target.id
+        }
+        sendAjax('post', '/download', t, () => {
+            alert('下载成功')
+        })
+    }
+
+    function del() {
+        const t = {
+            'id': event.target.id
+        }
+        sendAjax('post', '/del', t, (value) => {
+            if (value == 1) {
+                alert('删除成功')
+            }
+            if (value == -1) {
+                alert('删除失败')
+            }
+
+        })
+    }
+
+    function sendAjax(type, url, param, callback) {
+        $.ajax({
+            async: false,
+            ache: false,
+            type: type,
+            url: url,
+            // 将发送的数据转换为JSON字符串
+            data: JSON.stringify(param),
+            // 服务端返回数据的格式
+            dataType: "json",
+            success: function (data) {
+                callback(data);
+            },
+            error: function () {
+                //失败处理
+            },
+        });
+    }
+
     $('#infoTable').bootstrapTable({
         //是否显示分页条
         pagination: true,
@@ -63,7 +117,7 @@
         //是否开启分页条无限循环，最后一页时点击下一页是否转到第一页
         paginationLoop: false,
         //选择每页显示多少行，数据过少时可能会没有效果
-        pageList: [10, 50, 100],
+        pageList: [10, 25, 50],
         //启用关键字搜索框
         search: true,
     })

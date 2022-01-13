@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-11 00:11:38
+LastEditTime: 2022-01-13 22:28:41
 '''
 
 import json
@@ -46,11 +46,14 @@ def upload():
     return read_excel(f)
 
 
-@app.route('/download/<id>', methods=['GET'])
-def download(id):
-    print(id)
+@app.route('/download', methods=['POST'])
+def download():
+    data = json.loads(request.get_data())
+    id = data['id']
     download_log(id)
     return send_from_directory('static/data', id + ".xls")
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

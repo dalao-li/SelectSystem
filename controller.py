@@ -5,10 +5,10 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-11 00:13:10
+LastEditTime: 2022-01-13 22:35:08
 '''
 
-import random
+import random,os
 import pandas as pd
 import xlwt
 from models import *
@@ -24,28 +24,31 @@ def read_excel(f):
     # 处理excel
     if format not in ['xls', 'xlsx']:
         return {'code': -1}
-    df = pd.read_excel(f.filename, sheet_name='Sheet1')
+    f.save("static/download/" + f.filename)
+    df = pd.read_excel("static/download/" + f.filename , sheet_name='水资源、水环评项目评审专家库')
     a = []
     for i in df.values:
         p = People(
             id=get_random_id(),
-            name=i[0],
-            sex=i[1],
-            human_id=i[2],
-            school=i[3],
-            department=i[4],
-            rank=i[5],
-            rank_id=i[6],
-            professional1=i[7],
-            professional2=i[8],
-            professional3=i[9],
-            professional4=i[10],
-            professional5=i[11],
-            phone=i[12],
-            email=i[13],
-            identify=i[14]
+            name=i[1],
+            sex=i[2],
+            human_id=i[3],
+            school=i[4],
+            department=i[5],
+            rank=i[6],
+            rank_id=i[7],
+            professional1=i[8],
+            professional2=i[9],
+            professional3=i[10],
+            professional4=i[11],
+            professional5=i[12],
+            phone=i[13],
+            email=i[14],
+            identify=i[15]
         )
         a.append(p)
+    del(a[0])
+    del(a[0])
     try:
         session.query(People).delete()
         session.commit()
@@ -56,6 +59,7 @@ def read_excel(f):
     session.add_all(a)
     session.commit()
     session.close()
+    os.remove("static/download/" + f.filename)
     return {'code': 1}
 
 # 添加抽签记录
@@ -101,11 +105,10 @@ def add_log(data: dict) -> dict:
 
 # 下载抽签记录
 def download_log(id : str):
-    log = session.query(Log).filter(Log.id == id)
-    print(log)
+    log = session.query(Log).filter(Log.id == id)[0]
     e = xlwt.Workbook()
     s = e.add_sheet("Sheet1")
-    e.save("static/data/" + id + ".xls")
+    e.save("static/download/" + id + ".xls")
     # 写入表格
     s.write(0,0,'名称')
     s.write(0,1,'时间')

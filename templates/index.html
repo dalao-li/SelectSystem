@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-06 23:13:08
+ * @LastEditTime: 2022-01-13 21:46:12
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -121,12 +121,12 @@
 
             <div class="input-group mb-3">
                 <button type="button" class="btn btn-success" onclick="start()">开始抽签</button>
-                <button type="button" class="btn btn-danger" id="clear">清 空</button>
+                <button type="button" class="btn btn-danger" onclick="clear()">开始抽签</button>
             </div>
         </form>
 
 
-        <div class="alert alert-success" id="result"><span>抽签结果:</span></div>
+        <div class="alert alert-success" id="result"><span>抽签结果: </span></div>
     </div>
 </body>
 
@@ -144,12 +144,21 @@
             const code = data.code
             if (code == -1) {
                 alert('暂无该类专家，请确认')
-            } else {
+                return
+            }
+            if (code == 1) {
                 alert('抽签完成')
+            }
+            if (code == 0) {
+                alert('抽取人数小于实际人数，已全部抽取')
             }
             document.getElementById('result').innerText = '抽签结果:' + data.result
         })
 
+    }
+
+    function clear() {
+        document.getElementById('result').innerText = ''
     }
 
     function sendAjax(type, url, param, callback) {
