@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-13 23:18:29
+ * @LastEditTime: 2022-01-14 01:42:53
 -->
 
 <!DOCTYPE html>
@@ -29,7 +29,7 @@
     </ul>
     <div class="container">
         <div class="input-group mb-3">
-            <button type="button" onclick="clear()" class="btn btn-primary">清空</button>
+            <button type="button" class="btn btn-warning" onclick=clear()>清空</button>
         </div>
         <div>
             <table class="table table-hover" id="infoTable">
@@ -52,7 +52,7 @@
                         <td>{{ i.sum }}</td>
                         <td>{{ i.human }}</td>
                         <td><button type="button" class="btn btn-success" id="{{ i.id }}" onclick=download()>下载</button>
-                            <button type="button" class="btn btn-success" id="{{ i.id }}" onclick=del()>删除</button>
+                            <button type="button" class="btn btn-danger" id="{{ i.id }}" onclick=del()>删除</button>
                         </td>
                     </tr>
                     {% endfor %}
@@ -65,43 +65,24 @@
 <script src="{{ url_for('static',filename='bootstrap-table-zh-CN.min.js') }}"></script>
 <script>
     function download() {
-        location.href = '/download/' + event.target.id;
+        location.href = '/download/' + event.target.id
     }
 
     function del() {
-        const t = {
-            'id': event.target.id
-        }
-        sendAjax('post', '/del', t, (value) => {
-            if (value == 1) {
-                alert('删除成功')
-            }
-            if (value == -1) {
-                alert('删除失败')
-            }
+        $.get('/del/' + event.target.id, function () {
+            location.reload()
+            alert("删除成功")
+        })
 
+    }
+
+    function clear() {
+        console.log(77777)
+        $.get('/del/all', function () {
+            location.reload()
+            alert("清空成功")
         })
     }
-
-    function sendAjax(type, url, param, callback) {
-        $.ajax({
-            async: false,
-            ache: false,
-            type: type,
-            url: url,
-            // 将发送的数据转换为JSON字符串
-            data: JSON.stringify(param),
-            // 服务端返回数据的格式
-            dataType: "json",
-            success: function (data) {
-                callback(data);
-            },
-            error: function () {
-                //失败处理
-            },
-        });
-    }
-
     $('#infoTable').bootstrapTable({
         //是否显示分页条
         pagination: true,

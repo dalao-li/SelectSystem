@@ -5,9 +5,10 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-13 23:21:49
+LastEditTime: 2022-01-14 01:37:52
 '''
 
+from crypt import methods
 import json
 
 from flask import Flask, render_template, request,send_file
@@ -48,11 +49,17 @@ def upload():
 
 @app.route('/download/<id>', methods=['GET'])
 def download(id):
-    response = create_workbook(id)
+    response = download_excel(id)
     response.headers['Content-Type'] = "utf-8"
     response.headers["Cache-Control"] = "no-cache"
     response.headers["Content-Disposition"] = "attachment; filename=download.xlsx"
     return response
+
+
+@app.route('/del/<id>' , methods=['GET'])
+def delete(id):
+    print(id)
+    return del_log(id)
 
 
 

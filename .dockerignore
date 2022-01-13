@@ -3,8 +3,8 @@
 /.idea
 /static/upload/*
 /static/download/*
-Info.db
-
 /build
 /dist
-app.spec
+Info.db
+.doerigonre
+.gitignore
