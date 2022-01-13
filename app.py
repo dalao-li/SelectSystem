@@ -5,12 +5,12 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-13 22:28:41
+LastEditTime: 2022-01-13 23:21:49
 '''
 
 import json
 
-from flask import Flask, render_template, send_from_directory, request
+from flask import Flask, render_template, request,send_file
 
 from controller import *
 
@@ -46,12 +46,13 @@ def upload():
     return read_excel(f)
 
 
-@app.route('/download', methods=['POST'])
-def download():
-    data = json.loads(request.get_data())
-    id = data['id']
-    download_log(id)
-    return send_from_directory('static/data', id + ".xls")
+@app.route('/download/<id>', methods=['GET'])
+def download(id):
+    response = create_workbook(id)
+    response.headers['Content-Type'] = "utf-8"
+    response.headers["Cache-Control"] = "no-cache"
+    response.headers["Content-Disposition"] = "attachment; filename=download.xlsx"
+    return response
 
 
 

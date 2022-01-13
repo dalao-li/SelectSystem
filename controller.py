@@ -5,14 +5,14 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-13 22:35:08
+LastEditTime: 2022-01-13 23:20:11
 '''
 
-import random,os
+import random,os,io
 import pandas as pd
-import xlwt
+from xlsxwriter import *
 from models import *
-
+from flask import make_response
 
 def get_random_id() -> str:
     a = 'abcdefghijklmnopqrstuvwxyz123456'
@@ -104,27 +104,26 @@ def add_log(data: dict) -> dict:
     return {'code': code, 'result': r}
 
 # 下载抽签记录
-def download_log(id : str):
+def create_workbook(id : str):
     log = session.query(Log).filter(Log.id == id)[0]
-    e = xlwt.Workbook()
-    s = e.add_sheet("Sheet1")
-    e.save("static/download/" + id + ".xls")
-    # 写入表格
-    s.write(0,0,'名称')
-    s.write(0,1,'时间')
-    s.write(0,2,'类别')
-    s.write(0,3,'人数')
-    s.write(0,4,'名单')
-
-    s.write(1,0,log.name)
-    s.write(1,1,log.time)
-    s.write(1,2,log.identify)
-    s.write(1,3,log.sum)
-    s.write(1,4,log.human)
-   
+    fp = io.BytesIO()
+    b = Workbook(fp,{'in_memory': True})
+    s = b.add_worksheet('Sheet1')
+    title = ["名称","时间","类别","人数","名单"]
+    s.write_row('A1', title)
+    s.write('A2',log.name)
+    s.write('B2',log.time)
+    s.write('C2',log.identify)
+    s.write('D2',log.sum)
+    s.write('E2',log.human)
+    b.close()
+    response = make_response(fp.getvalue())
+    fp.close()
+    return response
 
 def get_log():
     return session.query(Log).all()
     
 def get_people():
     return session.query(People).all()
+

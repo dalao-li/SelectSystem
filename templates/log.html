@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-13 22:34:20
+ * @LastEditTime: 2022-01-13 23:18:29
 -->
 
 <!DOCTYPE html>
@@ -65,12 +65,7 @@
 <script src="{{ url_for('static',filename='bootstrap-table-zh-CN.min.js') }}"></script>
 <script>
     function download() {
-        const t = {
-            'id': event.target.id
-        }
-        sendAjax('post', '/download', t, () => {
-            alert('下载成功')
-        })
+        location.href = '/download/' + event.target.id;
     }
 
     function del() {
