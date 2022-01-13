@@ -5,11 +5,11 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-13 23:20:11
+LastEditTime: 2022-01-14 03:28:04
 '''
 
 import random,os,io
-import pandas as pd
+import xlrd
 from xlsxwriter import *
 from models import *
 from flask import make_response
@@ -20,14 +20,36 @@ def get_random_id() -> str:
 
 
 def read_excel(f):
+    def is_number(s):
+        try:
+            float(s)
+            return True
+        except ValueError:
+            pass
+ 
+        try:
+            import unicodedata
+            unicodedata.numeric(s)
+            return True
+        except (TypeError, ValueError):
+            pass
+ 
+        return False
+    
     format = f.filename.split('.')[1]
     # 处理excel
     if format not in ['xls', 'xlsx']:
         return {'code': -1}
     f.save("static/download/" + f.filename)
-    df = pd.read_excel("static/download/" + f.filename , sheet_name='水资源、水环评项目评审专家库')
+
+    e = xlrd.open_workbook('static/download/' + f.filename)
+    s = e.sheets()[0]
+    
     a = []
-    for i in df.values:
+    for j in range(s.nrows):
+        i = s.row_values(j)
+        if is_number(i[0]) is False:
+            continue
         p = People(
             id=get_random_id(),
             name=i[1],
@@ -47,8 +69,6 @@ def read_excel(f):
             identify=i[15]
         )
         a.append(p)
-    del(a[0])
-    del(a[0])
     try:
         session.query(People).delete()
         session.commit()
@@ -104,7 +124,7 @@ def add_log(data: dict) -> dict:
     return {'code': code, 'result': r}
 
 # 下载抽签记录
-def create_workbook(id : str):
+def download_excel(id : str):
     log = session.query(Log).filter(Log.id == id)[0]
     fp = io.BytesIO()
     b = Workbook(fp,{'in_memory': True})
@@ -120,6 +140,16 @@ def create_workbook(id : str):
     response = make_response(fp.getvalue())
     fp.close()
     return response
+
+def del_log(id : str):
+    if id == 'all':
+        session.query(Log).delete()
+        return {'code': -1}
+    log = session.query(Log).filter(Log.id == id)[0]
+    session.delete(log)
+    session.commit()
+    session.close()
+    return {'code': 1}
 
 def get_log():
     return session.query(Log).all()
