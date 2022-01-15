@@ -5,9 +5,10 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-14 03:28:04
+LastEditTime: 2022-01-15 22:31:00
 '''
 
+from dis import findlabels
 import random,os,io
 import xlrd
 from xlsxwriter import *
@@ -41,10 +42,8 @@ def read_excel(f):
     if format not in ['xls', 'xlsx']:
         return {'code': -1}
     f.save("static/download/" + f.filename)
-
-    e = xlrd.open_workbook('static/download/' + f.filename)
+    e = xlrd.open_workbook("static/download/" + f.filename)
     s = e.sheets()[0]
-    
     a = []
     for j in range(s.nrows):
         i = s.row_values(j)

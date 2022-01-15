@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-14 01:37:52
+LastEditTime: 2022-01-15 19:45:59
 '''
 
 from crypt import methods
@@ -50,6 +50,7 @@ def upload():
 @app.route('/download/<id>', methods=['GET'])
 def download(id):
     response = download_excel(id)
+    print("response",type(response))
     response.headers['Content-Type'] = "utf-8"
     response.headers["Cache-Control"] = "no-cache"
     response.headers["Content-Disposition"] = "attachment; filename=download.xlsx"
