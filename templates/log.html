@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-14 01:42:53
+ * @LastEditTime: 2022-01-15 13:19:40
 -->
 
 <!DOCTYPE html>
@@ -13,6 +13,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Title</title>
     <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap-table.min.css') }}">
@@ -83,6 +84,7 @@
             alert("清空成功")
         })
     }
+
     $('#infoTable').bootstrapTable({
         //是否显示分页条
         pagination: true,
