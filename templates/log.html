@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-15 13:19:40
+ * @LastEditTime: 2022-01-17 05:05:42
 -->
 
 <!DOCTYPE html>
@@ -24,8 +24,8 @@
 
 <body>
     <ul class="breadcrumb">
-        <li><a href="/">开始抽签</a>/</li>
-        <li><a href="/data">导入数据</a>/</li>
+        <li><a href="{{ url_for('index_page') }}">开始抽签</a>/</li>
+        <li><a href="{{ url_for('data_page') }}">导入数据</a>/</li>
         <li class="active">抽签记录</a></li>
     </ul>
     <div class="container">
