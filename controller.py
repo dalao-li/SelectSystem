@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-15 22:41:03
+LastEditTime: 2022-01-18 04:06:24
 '''
 
 from dis import findlabels
@@ -81,9 +81,8 @@ def read_excel(f):
     os.remove("static/download/" + f.filename)
     return {'code': 1}
 
-# 添加抽签记录
-def add_log(data: dict) -> dict:
-    name, time, department, people, word1, word2, start_time, end_time, identify, s = data.values()
+def select_poeple(data):
+    identify, s = data.values()
 
     p = list(session.query(People).filter(People.identify == identify))
     # 没有这类专家
@@ -101,7 +100,44 @@ def add_log(data: dict) -> dict:
     # 拼接结果
     for i in index:
         r += (p[i].name + '; ')
+    return {'code': code, 'result': r}
 
+
+def select_poeple2(data):
+    identify, s,text = data.values()
+    # 已经抽取的人
+    b = text.split(':')[1].split(';')
+    p = list(session.query(People).filter(People.identify == identify))
+    
+    # 剔除已经抽取的人，在剩余人员中进行抽取
+    c = []
+    for i in p:
+        for j in b:
+            if j != '' and i.name != j:
+                c.append(i.name)
+    # 人抽完了
+    if not len(c):
+        return {'code': -1, 'result': ''}
+    # 人数少于要抽出的人数
+    elif len(c) <= int(s):
+        code = 0
+        index = [i for i in range(len(c))]
+    else:
+        code = 1
+        # 产生sum个随机数，记录下标
+        index = random.sample(range(0, len(c)), int(s))
+    r = ""
+    # 拼接结果
+    for i in index:
+        r += (c[i] + '; ')
+    return {'code': code, 'result': r}
+
+
+
+def add_log(data: dict) -> dict:
+    name, time, department, people, word1, word2, start_time, end_time, identify, s,s2,word3,r,r2 = data.values()
+
+    print(data)
     # 添加记录
     log = Log(
         id=get_random_id(),
@@ -115,12 +151,15 @@ def add_log(data: dict) -> dict:
         endTime=end_time, 
         identify=identify, 
         sum=s, 
-        human=r
+        human=r,
+        sum2 = s2,
+        human2 = r2,
+        word3 = word3
     )
     session.add(log)
     session.commit()
     session.close()
-    return {'code': code, 'result': r}
+    return {'code': 1}
 
 # 下载抽签记录
 def download_excel(id : str):

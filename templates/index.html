@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-17 05:05:34
+ * @LastEditTime: 2022-01-18 04:08:03
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -64,15 +64,11 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">专家评审内容</span>
                 </div>
-                <label for="name"></label>
                 <textarea class="form-control" rows="3" id="word1" name="word1"></textarea>
-            </div>
 
-            <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">评审专家、领域等事项</span>
                 </div>
-                <label for="name"></label>
                 <textarea class="form-control" rows="3" id="word2" name="word2"></textarea>
             </div>
 
@@ -111,56 +107,116 @@
 
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
-                    <span class="input-group-text">抽签人数</span>
+                    <span class="input-group-text">抽取人数</span>
                 </div>
                 <select class="form-control" name="sum">
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
                 </select>
+
+                <button type="button" class="btn btn-success" onclick="select1()">抽取</button>
             </div>
+
+            <div class="alert alert-primary" id="result">抽取结果:<span></span></div>
 
             <div class="input-group mb-3">
-                <button type="button" class="btn btn-success" onclick="start()">开始抽签</button>
-                <button type="button" class="btn btn-danger" onclick="clear()">清空</button>
+                <div class="input-group-prepend">
+                    <span class="input-group-text">补充抽取人数</span>
+                </div>
+                <select class="form-control" name="sum2" id="sum2">
+                    <option value="0">0</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <button type="button" class="btn btn-danger" onclick="select2()">补充抽取</button>
+            </div>
+
+            <div class="alert alert-success" id="result2">补充抽取名单:<span></span></div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">备注</span>
+                </div>
+                <label for="name"></label>
+                <textarea class="form-control" rows="3" id="word3" name="word3"></textarea>
             </div>
         </form>
-
-
-        <div class="alert alert-success" id="result"><span>抽签结果: </span></div>
+        <button type="button" class="btn btn-warning" onclick="add()">提交</button>
     </div>
 </body>
 
 <script>
-    function start() {
-        const d = {}
-        const t = $('#addForm').serializeArray()
-        $.each(t, function () {
-            d[this.name] = this.value
-        })
-        for (const i in d) {
-            console.log(i, d[i])
+    function select1() {
+        const identify = $('#identify').val()
+        const sum = $('#sum').val()
+        const d = {
+            'identify': identify,
+            'sum': sum
         }
-        sendAjax('post', '/add', d, (data) => {
+        sendAjax('post', '/select', d, (data) => {
             const code = data.code
             if (code == -1) {
                 alert('暂无该类专家，请确认')
                 return
-            }
-            if (code == 1) {
-                alert('抽签完成')
             }
             if (code == 0) {
                 alert('抽取人数小于实际人数，已全部抽取')
             }
             document.getElementById('result').innerText = '抽签结果:' + data.result
         })
-
     }
 
-    function clear() {
-        document.getElementById('result').innerText = ''
+    function select2() {
+        const identify = $('#identify').val()
+        const sum = $('#sum2').val()
+        const text = document.getElementById('result').innerText
+        const d = {
+            'identify': identify,
+            'sum': sum,
+            'text': text
+        }
+        sendAjax('post', '/select2', d, (data) => {
+            const code = data.code
+            if (code == -1) {
+                alert('该类专家已被抽取完')
+                return
+            }
+            if (code == 0) {
+                alert('补充抽取人数小于可抽取人数，已全部抽取')
+            }
+            document.getElementById('result2').innerText = '补充抽签结果:' + data.result
+        })
     }
+
+    function add() {
+        const d = {}
+        const t = $('#addForm').serializeArray()
+        $.each(t, function () {
+            d[this.name] = this.value
+        })
+        d['r'] = document.getElementById('result').innerText
+
+        if (d['r'] == '抽取结果:') {
+            alert("请抽签")
+            return
+        }
+        d['r2'] = document.getElementById('result').innerText
+
+        // for (const i in d) {
+        //     console.log(i, d[i])
+        // }
+        sendAjax('post', '/add', d, (data) => {
+            const code = data.code
+            if (code == 1) {
+                alert('提交成功')
+                return
+            }
+        })
+    }
+
 
     function sendAjax(type, url, param, callback) {
         $.ajax({
@@ -178,7 +234,7 @@
             error: function () {
                 //失败处理
             },
-        });
+        })
     }
 </script>
 

@@ -5,20 +5,32 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-15 19:45:59
+LastEditTime: 2022-01-18 03:54:22
 '''
 
-from crypt import methods
 import json
 
-from flask import Flask, render_template, request,send_file
+from flask import Flask, render_template, request, redirect,url_for
 
 from controller import *
 
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'])
+@app.route('/',methods=['GET','POST'])
+def login_page():
+    if request.method == 'GET':
+        return render_template('login.html',status=1)
+    if request.method == 'POST':
+        name = request.form.get("name")
+        pwd = request.form.get("pwd")
+        if name == 'admin' and pwd == 'admin':
+            return redirect(url_for('index_page'))
+        else :
+            return render_template('login.html',status=-1)
+
+
+@app.route('/index', methods=['GET'])
 def index_page():
     return render_template('index.html')
 
@@ -35,6 +47,18 @@ def log_page():
     return render_template('log.html', data = data)
 
 # 抽签
+@app.route('/select', methods=['POST'])
+def select():
+    data = json.loads(request.get_data())
+    return select_poeple(data)
+
+# 补充抽签
+@app.route('/select2', methods=['POST'])
+def select2():
+    data = json.loads(request.get_data())
+    return select_poeple2(data)
+
+
 @app.route('/add', methods=['POST'])
 def add():
     data = json.loads(request.get_data())

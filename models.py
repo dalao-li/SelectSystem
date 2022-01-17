@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:53
 LastEditors: DaLao
-LastEditTime: 2022-01-10 10:51:49
+LastEditTime: 2022-01-18 03:58:44
 '''
 
 from sqlalchemy.ext.declarative import declarative_base
@@ -31,6 +31,13 @@ class Log(Base):
     sum = Column(String(32))
     # 抽到的人名
     human = Column(String(32))
+
+    # 补充抽取的人数
+    sum2 = Column(String(32))
+    # 补充抽到的人名
+    human2 = Column(String(32))
+    # 备注
+    word3 = Column(String(32))
 
 class People(Base):
     __tablename__ = 'People'
