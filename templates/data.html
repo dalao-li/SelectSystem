@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 12:44:48
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-17 05:05:27
+ * @LastEditTime: 2022-01-18 13:54:26
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -18,8 +18,10 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap-table.min.css') }}">
     <script src="{{ url_for('static',filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='popper.min.js') }}"></script>
     <script src="{{ url_for('static',filename='bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static',filename='bootstrap-table.min.js') }}"></script>
+
 </head>
 
 <body>
@@ -41,7 +43,7 @@
         </div>
 
         <div class="input-group mb-3">
-            <button type="button" onclick="upload()" class="btn btn-primary">提交</button>
+            <button type="button" onclick="upload()" class="btn btn-success">提交</button>
         </div>
 
         <div>
@@ -52,9 +54,8 @@
                         <th>姓名</th>
                         <th>性别</th>
                         <th>工作单位</th>
-                        <th>职称</th>
-                        <th>电话</th>
                         <th>类别</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,9 +65,8 @@
                         <td>{{ i.name }}</td>
                         <td>{{ i.sex }}</td>
                         <td>{{ i.department }}</td>
-                        <td>{{ i.rank }}</td>
-                        <td>{{ i.phone }}</td>
                         <td>{{ i.identify }}</td>
+                        <td><button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -78,10 +78,21 @@
 
 <script src="{{ url_for('static',filename='bootstrap-table-zh-CN.min.js') }}"></script>
 <script>
+    function get() {
+        $.get('/get/' + event.target.id, function (data) {
+            alert(data)
+        })
+    }
+
     function upload() {
         const f = document.getElementById("file").files[0]
         if (!f) {
             alert("请选择上传文件")
+            return
+        }
+        const format = f.name.split('.')[1]
+        if (format != 'xlsx' && format != 'xls') {
+            alert("上传文件不是Excel文件!请重试")
             return
         }
         var form = new FormData()
@@ -100,9 +111,6 @@
                 if (data.code == 1) {
                     alert("上传成功")
                     location.reload()
-                }
-                if (data.code == -1) {
-                    alert("上传文件不是Excel文件!请重试")
                 }
             },
             error: function () {

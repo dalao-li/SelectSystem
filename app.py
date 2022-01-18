@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-18 03:54:22
+LastEditTime: 2022-01-18 13:49:36
 '''
 
 import json
@@ -83,10 +83,11 @@ def download(id):
 
 @app.route('/del/<id>' , methods=['GET'])
 def delete(id):
-    print(id)
     return del_log(id)
 
-
+@app.route('/get/<id>' , methods=['GET'])
+def get(id):
+    return get_info(id)
 
 if __name__ == '__main__':
     app.run(debug=True)

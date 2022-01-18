@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-18 04:06:24
+LastEditTime: 2022-01-18 13:51:31
 '''
 
 from dis import findlabels
@@ -36,19 +36,24 @@ def read_excel(f):
             pass
  
         return False
-    
-    format = f.filename.split('.')[1]
-    # 处理excel
-    if format not in ['xls', 'xlsx']:
-        return {'code': -1}
-    f.save("static/download/" + f.filename)
-    e = xlrd.open_workbook("static/download/" + f.filename)
+    f.save("static/read/" + f.filename)
+    e = xlrd.open_workbook("static/read/" + f.filename)
+    # 读取第一个sheet
     s = e.sheets()[0]
     a = []
+    # 遍历每一行
     for j in range(s.nrows):
+        # 读取这一行的数据
         i = s.row_values(j)
+        # 跳过非数据行
         if is_number(i[0]) is False:
             continue
+        # 将float数据转为str
+        for z in range(len(i)):
+            if isinstance(i[z],float):
+                i[z] = str(int(i[z]))
+            i[z].strip('\n')
+            i[z].replace(" ","")
         p = People(
             id=get_random_id(),
             name=i[1],
@@ -78,12 +83,12 @@ def read_excel(f):
     session.add_all(a)
     session.commit()
     session.close()
-    os.remove("static/download/" + f.filename)
+    os.remove("static/read/" + f.filename)
     return {'code': 1}
 
 def select_poeple(data):
     identify, s = data.values()
-
+    
     p = list(session.query(People).filter(People.identify == identify))
     # 没有这类专家
     if not len(p):
@@ -99,24 +104,22 @@ def select_poeple(data):
     r = ""
     # 拼接结果
     for i in index:
-        r += (p[i].name + '; ')
+        r += (p[i].name + ';')
     return {'code': code, 'result': r}
 
 
 def select_poeple2(data):
     identify, s,text = data.values()
-    # 已经抽取的人
-    b = text.split(':')[1].split(';')
+    # 已经抽取的人名单
+    b = text.split(';')
     p = list(session.query(People).filter(People.identify == identify))
-    
     # 剔除已经抽取的人，在剩余人员中进行抽取
     c = []
     for i in p:
-        for j in b:
-            if j != '' and i.name != j:
-                c.append(i.name)
+        if i.name not in b:
+            c.append(i.name)
     # 人抽完了
-    if not len(c):
+    if len(c) == 0:
         return {'code': -1, 'result': ''}
     # 人数少于要抽出的人数
     elif len(c) <= int(s):
@@ -129,7 +132,7 @@ def select_poeple2(data):
     r = ""
     # 拼接结果
     for i in index:
-        r += (c[i] + '; ')
+        r += (c[i] + ';')
     return {'code': code, 'result': r}
 
 
@@ -195,3 +198,26 @@ def get_log():
 def get_people():
     return session.query(People).all()
 
+def get_info(id):
+    p = session.query(People).filter(People.id == id)[0]
+    data = {
+            '姓名: ':p.name,
+            '性别: ':p.sex,
+            '身份证: ':p.human_id,
+            '学校: ':p.school,
+            '工作单位: ':p.department,
+            '职称: ':p.rank,
+            '职称编号: ':p.rank_id,
+            '专业1: ':p.professional1,
+            '专业2: ':p.professional2,
+            '专业3: ':p.professional3,
+            '专业4: ':p.professional4,
+            '专业4: ':p.professional5,
+            '电话: ':p.phone,
+            '邮件: ':p.email,
+            '类别: ':p.identify
+    }
+    c = ''
+    for k,v in data.items():
+        c += (k + v + "\n")
+    return c
