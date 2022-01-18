@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-18 14:26:37
+ * @LastEditTime: 2022-01-18 18:20:43
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -20,13 +20,13 @@
 </head>
 
 <body>
-    <ul class="breadcrumb">
-        <li class="active">开始抽签/</li>
-        <li><a href="{{ url_for('data_page') }}">导入数据/</a></li>
-        <li><a href="{{ url_for('log_page') }}">抽签记录</a></li>
-    </ul>
+    <div id="full" class="d-flex mb-1">
+        <button type="button" class="btn btn-danger flex-fill me-1 btn-lg" onclick="a('index')">开始抽签</button>
+        <button type="button" class="btn btn-warning flex-fill me-1 btn-lg" onclick="a('data')">导入数据</button>
+        <button type="button" class="btn btn-primary flex-fill btn-lg" onclick="a('log')">抽签记录</button>
+    </div>
 
-    <div class="container">
+    <div class="container mb-3">
         <form id="addForm" action="" onsubmit="return false;">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -147,6 +147,10 @@
 </body>
 
 <script>
+    function a(url) {
+        location.href = '/' + url
+    }
+
     function select1() {
         const identify = $('#identify').val()
         const sum = $('#sum').val()
@@ -154,13 +158,12 @@
             'identify': identify,
             'sum': sum
         }
-        sendAjax('post', '/select/first', d, (data) => {
-            const code = data.code
-            if (code == -1) {
+        $.post('/select/first', JSON.stringify(d), function (data) {
+            if (data.code == -1) {
                 alert('暂无该类专家，请确认')
                 return
             }
-            if (code == 0) {
+            if (data.code == 0) {
                 alert('抽取人数小于实际人数，已全部抽取')
             }
             document.getElementById('result').innerText = '抽取结果:' + data.result
@@ -188,13 +191,12 @@
             'sum2': sum2,
             'text': text.split(':')[1]
         }
-        sendAjax('post', '/select/second', d, (data) => {
-            const code = data.code
-            if (code == -1) {
+        $.post('/select/second', JSON.stringify(d), function (data) {
+            if (data.code == -1) {
                 alert('该类专家已被抽取完')
                 return
             }
-            if (code == 0) {
+            if (data.code == 0) {
                 alert('补充抽取人数小于可抽取人数，已全部抽取')
             }
             document.getElementById('result2').innerText = '补充抽取结果:' + data.result
@@ -217,36 +219,12 @@
         d['r'] = r.split(':')[1]
         d['r2'] = r2.split(':')[1]
 
-        // for (const i in d) {
-        //     console.log(i, d[i])
-        // }
-        sendAjax('post', '/add', d, (data) => {
-            const code = data.code
-            if (code == 1) {
+        $.post('/add', JSON.stringify(d), function (data) {
+            if (data.code == 1) {
                 alert('提交成功')
                 location.reload()
                 return
             }
-        })
-    }
-
-
-    function sendAjax(type, url, param, callback) {
-        $.ajax({
-            async: false,
-            ache: false,
-            type: type,
-            url: url,
-            // 将发送的数据转换为JSON字符串
-            data: JSON.stringify(param),
-            // 服务端返回数据的格式
-            dataType: "json",
-            success: function (data) {
-                callback(data);
-            },
-            error: function () {
-                //失败处理
-            },
         })
     }
 </script>

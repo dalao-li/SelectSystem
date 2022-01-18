@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-18 15:29:32
+ * @LastEditTime: 2022-01-18 18:21:47
 -->
 
 <!DOCTYPE html>
@@ -26,11 +26,11 @@
 </head>
 
 <body>
-    <ul class="breadcrumb">
-        <li><a href="{{ url_for('index_page') }}">开始抽签</a>/</li>
-        <li><a href="{{ url_for('data_page') }}">导入数据</a>/</li>
-        <li class="active">抽签记录</a></li>
-    </ul>
+    <div id="full" class="d-flex mb-1">
+        <button type="button" class="btn btn-danger flex-fill me-1 btn-lg" onclick="a('index')">开始抽签</button>
+        <button type="button" class="btn btn-warning flex-fill me-1 btn-lg" onclick="a('data')">导入数据</button>
+        <button type="button" class="btn btn-primary flex-fill btn-lg" onclick="a('log')">抽签记录</button>
+    </div>
     <div class="container">
         <div>
             <table class="table table-hover" id="infoTable">
@@ -65,6 +65,10 @@
 
 <script src="{{ url_for('static',filename='bootstrap-table-zh-CN.min.js') }}"></script>
 <script>
+    function a(url) {
+        location.href = '/' + url
+    }
+
     function download() {
         location.href = '/download/' + event.target.id
     }
@@ -92,17 +96,17 @@
     }
 
     $('#infoTable').bootstrapTable({
-        //是否显示分页条
+        // 是否显示分页条
         pagination: true,
-        //首页页码
+        // 首页页码
         pageNumber: 1,
-        //一页显示的行数
+        // 一页显示的行数
         pageSize: 10,
-        //是否开启分页条无限循环，最后一页时点击下一页是否转到第一页
+        // 是否开启分页条无限循环，最后一页时点击下一页是否转到第一页
         paginationLoop: false,
-        //选择每页显示多少行，数据过少时可能会没有效果
+        // 选择每页显示多少行，数据过少时可能会没有效果
         pageList: [10, 25, 50],
-        //启用关键字搜索框
+        // 启用关键字搜索框
         search: true,
     })
 </script>
