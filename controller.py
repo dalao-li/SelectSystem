@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-18 14:35:35
+LastEditTime: 2022-01-18 14:54:04
 '''
 
 from dis import findlabels
@@ -37,8 +37,8 @@ def read_excel(f):
             pass
  
         return False
-    f.save("static/read/" + f.filename)
-    e = xlrd.open_workbook("static/read/" + f.filename)
+    f.save("static/" + f.filename)
+    e = xlrd.open_workbook("static/" + f.filename)
     # 读取第一个sheet
     s = e.sheets()[0]
     a = []
@@ -84,7 +84,7 @@ def read_excel(f):
     session.add_all(a)
     session.commit()
     session.close()
-    os.remove("static/read/" + f.filename)
+    os.remove("static/" + f.filename)
     return {'code': 1}
 
 def select_poeple(data):
