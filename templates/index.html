@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-18 13:25:55
+ * @LastEditTime: 2022-01-18 14:26:37
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -154,7 +154,7 @@
             'identify': identify,
             'sum': sum
         }
-        sendAjax('post', '/select', d, (data) => {
+        sendAjax('post', '/select/first', d, (data) => {
             const code = data.code
             if (code == -1) {
                 alert('暂无该类专家，请确认')
@@ -188,7 +188,7 @@
             'sum2': sum2,
             'text': text.split(':')[1]
         }
-        sendAjax('post', '/select2', d, (data) => {
+        sendAjax('post', '/select/second', d, (data) => {
             const code = data.code
             if (code == -1) {
                 alert('该类专家已被抽取完')
@@ -224,6 +224,7 @@
             const code = data.code
             if (code == 1) {
                 alert('提交成功')
+                location.reload()
                 return
             }
         })

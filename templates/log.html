@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-17 05:05:42
+ * @LastEditTime: 2022-01-18 14:18:43
 -->
 
 <!DOCTYPE html>
@@ -29,30 +29,27 @@
         <li class="active">抽签记录</a></li>
     </ul>
     <div class="container">
-        <div class="input-group mb-3">
-            <button type="button" class="btn btn-warning" onclick=clear()>清空</button>
-        </div>
         <div>
             <table class="table table-hover" id="infoTable">
                 <thead>
                     <tr>
-                        <th>名称</th>
-                        <th>时间</th>
-                        <th>类别</th>
-                        <th>人数</th>
-                        <th>名单</th>
+                        <th>序号</th>
+                        <th>事项名称</th>
+                        <th>受理时间</th>
+                        <th>申请单位</th>
                         <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for i in data %}
                     <tr>
+                        <td>{{ loop.index }}</td>
                         <td>{{ i.name }}</td>
                         <td>{{ i.time }}</td>
-                        <td>{{ i.identify }}</td>
-                        <td>{{ i.sum }}</td>
-                        <td>{{ i.human }}</td>
-                        <td><button type="button" class="btn btn-success" id="{{ i.id }}" onclick=download()>下载</button>
+                        <td>{{ i.department }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button>
+                            <button type="button" class="btn btn-success" id="{{ i.id }}" onclick=download()>下载</button>
                             <button type="button" class="btn btn-danger" id="{{ i.id }}" onclick=del()>删除</button>
                         </td>
                     </tr>
@@ -77,8 +74,14 @@
 
     }
 
+    function get() {
+        $.get('/get/log/' + event.target.id, function (data) {
+            alert(data)
+        })
+
+    }
+
     function clear() {
-        console.log(77777)
         $.get('/del/all', function () {
             location.reload()
             alert("清空成功")

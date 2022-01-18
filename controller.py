@@ -5,11 +5,12 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-18 13:51:31
+LastEditTime: 2022-01-18 14:35:35
 '''
 
 from dis import findlabels
 import random,os,io
+from struct import pack
 import xlrd
 from xlsxwriter import *
 from models import *
@@ -166,17 +167,30 @@ def add_log(data: dict) -> dict:
 
 # 下载抽签记录
 def download_excel(id : str):
-    log = session.query(Log).filter(Log.id == id)[0]
+    p = session.query(Log).filter(Log.id == id)[0]
     fp = io.BytesIO()
     b = Workbook(fp,{'in_memory': True})
     s = b.add_worksheet('Sheet1')
-    title = ["名称","时间","类别","人数","名单"]
-    s.write_row('A1', title)
-    s.write('A2',log.name)
-    s.write('B2',log.time)
-    s.write('C2',log.identify)
-    s.write('D2',log.sum)
-    s.write('E2',log.human)
+    data = {
+            '事项名称: ':p.name,
+            '受理时间: ':p.time,
+            '申请单位: ':p.department,
+            '联系人: ':p.people,
+            '专家评审内容: ':p.word1,
+            '评审专家、领域等事项: ':p.word2,
+            '组织时间: ':p.startTime + "/" + p.endTime,
+            '类别: ':p.identify,
+            '抽取人数: ':p.sum,
+            '抽取名单: ':p.human,
+            '补抽人数: ':p.sum2,
+            '补抽名单: ':p.human2,
+            '备注: ':p.word3,
+    }
+    s.write_row('A1', list(data.keys()))
+    x = 65
+    for v in data.values() :
+        s.write( chr(x) + '2',v)
+        x += 1
     b.close()
     response = make_response(fp.getvalue())
     fp.close()
@@ -192,7 +206,7 @@ def del_log(id : str):
     session.close()
     return {'code': 1}
 
-def get_log():
+def get_all_log():
     return session.query(Log).all()
     
 def get_people():
@@ -216,6 +230,28 @@ def get_info(id):
             '电话: ':p.phone,
             '邮件: ':p.email,
             '类别: ':p.identify
+    }
+    c = ''
+    for k,v in data.items():
+        c += (k + v + "\n")
+    return c
+
+def get_log(id):
+    p = session.query(Log).filter(Log.id == id)[0]
+    data = {
+            '事项名称: ':p.name,
+            '受理时间: ':p.time,
+            '申请单位: ':p.department,
+            '联系人: ':p.people,
+            '专家评审内容: ':p.word1,
+            '评审专家、领域等事项: ':p.word2,
+            '组织时间: ':p.startTime + "/" + p.endTime,
+            '类别: ':p.identify,
+            '抽取人数: ':p.sum,
+            '抽取名单: ':p.human,
+            '补抽人数: ':p.sum2,
+            '补抽名单: ':p.human2,
+            '备注: ':p.word3,
     }
     c = ''
     for k,v in data.items():

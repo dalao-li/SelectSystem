@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-18 13:49:36
+LastEditTime: 2022-01-18 14:24:01
 '''
 
 import json
@@ -43,20 +43,17 @@ def data_page():
 
 @app.route('/log', methods=['GET'])
 def log_page():
-    data = get_log()
+    data = get_all_log()
     return render_template('log.html', data = data)
 
 # 抽签
-@app.route('/select', methods=['POST'])
-def select():
+@app.route('/select/<status>', methods=['POST'])
+def select(status):
     data = json.loads(request.get_data())
-    return select_poeple(data)
-
-# 补充抽签
-@app.route('/select2', methods=['POST'])
-def select2():
-    data = json.loads(request.get_data())
-    return select_poeple2(data)
+    if status == 'first':
+        return select_poeple(data)
+    if status == 'second':
+        return select_poeple2(data)
 
 
 @app.route('/add', methods=['POST'])
@@ -85,9 +82,13 @@ def download(id):
 def delete(id):
     return del_log(id)
 
-@app.route('/get/<id>' , methods=['GET'])
-def get(id):
-    return get_info(id)
+@app.route('/get/<status>/<id>' , methods=['GET'])
+def get(status,id):
+    if status == 'people':
+        return get_info(id)
+    if status == 'log':
+        return get_log(id)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
