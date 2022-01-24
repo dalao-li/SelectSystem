@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-24 21:01:47
+LastEditTime: 2022-01-25 22:04:34
 '''
 
 import json
@@ -25,15 +25,15 @@ def login_page():
         name = request.form.get("name")
         pwd = request.form.get("pwd")
         if name == 'admin' and pwd == 'admin':
-            return redirect(url_for('index_page'))
+            return redirect(url_for('main_page'))
         else :
             return render_template('login.html',status=-1)
 
 
-@app.route('/index', methods=['GET'])
-def index_page():
+@app.route('/main', methods=['GET'])
+def main_page():
     if request.method == 'GET':
-        return render_template('index.html')
+        return render_template('main.html')
 
 
 @app.route('/data', methods=['GET','POST'])
@@ -55,10 +55,7 @@ def log_page():
 @app.route('/select/<status>', methods=['POST'])
 def select(status):
     data = json.loads(request.get_data())
-    if status == 'first':
-        return select_poeple(data)
-    if status == 'second':
-        return select_poeple2(data)
+    return select_people(data,status)
 
 
 @app.route('/add', methods=['POST'])
@@ -82,10 +79,7 @@ def delete(id):
 
 @app.route('/get/<status>/<id>' , methods=['GET'])
 def get(status,id):
-    if status == 'people':
-        return get_info(id)
-    if status == 'log':
-        return get_log(id)
+    return get_info(status, id)
 
 
 if __name__ == '__main__':

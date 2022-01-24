@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-18 18:33:41
+ * @LastEditTime: 2022-01-25 21:46:07
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -20,12 +20,20 @@
 </head>
 
 <body>
-    <div id="full" class="d-flex mb-1">
-        <button type="button" class="btn btn-danger flex-fill me-1 btn-lg" onclick="a('index')">开始抽签</button>
-        <button type="button" class="btn btn-warning flex-fill me-1 btn-lg" onclick="a('data')">导入数据</button>
-        <button type="button" class="btn btn-primary flex-fill btn-lg" onclick="a('log')">抽签记录</button>
-        <button type="button" class="btn btn-success flex-fill btn-lg" onclick="a('')">退出登陆</button>
-    </div>
+    <nav class="navbar navbar-expand-sm bg-light justify-content-center">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/main">开始抽签</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/data">导入数据</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/log">抽签记录</a>
+            </li>
+        </ul>
+    </nav>
+
 
     <div class="container mb-3">
         <form id="addForm" action="" onsubmit="return false;">
@@ -55,16 +63,12 @@
             </div>
 
             <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">专家评审内容</span>
-                </div>
+                <span class="input-group-text">专家评审内容</span>
                 <textarea class="form-control" rows="3" id="word1" name="word1"></textarea>
             </div>
 
             <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">评审专家、领域等事项</span>
-                </div>
+                <span class="input-group-text">评审专家、领域等事项</span>
                 <textarea class="form-control" rows="3" id="word2" name="word2"></textarea>
             </div>
 
@@ -79,9 +83,7 @@
             </div>
 
             <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">人员分类</span>
-                </div>
+                <span class="input-group-text">人员分类</span>
                 <select class="form-control" name="identify" id="identify">
                     <option value="水务类">水务类</option>
                     <option value="工程消费类">工程消费类</option>
@@ -102,9 +104,7 @@
             </div>
 
             <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">抽取人数</span>
-                </div>
+                <span class="input-group-text">抽取人数</span>
                 <select class="form-control" name="sum" id="sum">
                     <option value="3">3</option>
                     <option value="4">4</option>
@@ -136,10 +136,7 @@
             <div class="alert alert-success" id="result2">补充抽取结果:<span></span></div>
 
             <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">备注</span>
-                </div>
-                <label for="name"></label>
+                <span class="input-group-text">备注</span>
                 <textarea class="form-control" rows="3" id="word3" name="word3"></textarea>
             </div>
         </form>
@@ -153,13 +150,12 @@
     }
 
     function select1() {
-        const identify = $('#identify').val()
-        const sum = $('#sum').val()
         const d = {
-            'identify': identify,
-            'sum': sum
+            'identify': $('#identify').val(),
+            'sum': $('#sum').val()
         }
-        $.post('/select/first', JSON.stringify(d), function (data) {
+
+        $.post('/select/1', JSON.stringify(d), function (data) {
             if (data.code == -1) {
                 alert('暂无该类专家，请确认')
                 return
@@ -189,10 +185,10 @@
         }
         const d = {
             'identify': identify,
-            'sum2': sum2,
+            'sum': sum2,
             'text': text.split(':')[1]
         }
-        $.post('/select/second', JSON.stringify(d), function (data) {
+        $.post('/select/2', JSON.stringify(d), function (data) {
             if (data.code == -1) {
                 alert('该类专家已被抽取完')
                 return

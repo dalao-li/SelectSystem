@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2022-01-17 23:58:08
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-24 18:13:18
+ * @LastEditTime: 2022-01-25 21:12:53
 -->
 
 <!DOCTYPE html>
@@ -21,11 +21,6 @@
     <script src="{{ url_for('static',filename='jquery.min.js') }}"></script>
     <script src="{{ url_for('static',filename='bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static',filename='bootstrap-table.min.js') }}"></script>
-    <style>
-        body {
-            background-image: url("{{ url_for('static', filename='a.jpg') }}")
-        }
-    </style>
 </head>
 
 <body>
@@ -41,14 +36,14 @@
                 </div>
                 {% endif %}
                 <form action="/" method="POST">
-                    <div class="input-group input-group-lg mb-3">
+                    <div class="input-group input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">用户</span>
                         </div>
                         <input type="text" class="form-control" id="name" name="name" required />
                     </div>
 
-                    <div class="input-group input-group-lg mb-3">
+                    <div class="input-group input-group mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text">密码</span>
                         </div>

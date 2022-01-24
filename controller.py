@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-24 18:25:36
+LastEditTime: 2022-01-25 22:07:13
 '''
 
 from dis import findlabels
@@ -16,7 +16,7 @@ from xlsxwriter import *
 from models import *
 from flask import make_response
 
-def get_random_id() -> str:
+def get_random_id()-> str:
     a = 'abcdefghijklmnopqrstuvwxyz123456'
     return ''.join(random.sample(a, 32))
 
@@ -87,40 +87,25 @@ def read_excel(f):
     os.remove("static/" + f.filename)
     return 1
 
-def select_poeple(data):
-    identify, s = data.values()
-    
-    p = list(session.query(People).filter(People.identify == identify))
-    # 没有这类专家
-    if not len(p):
-        return {'code': -1, 'result': ''}
-    # 人数少于要抽出的人数
-    elif len(p) <= int(s):
-        code = 0
-        index = [i for i in range(len(p))]
-    else:
-        code = 1
-        # 产生sum个随机数，记录下标
-        index = random.sample(range(0, len(p)), int(s))
-    r = ""
-    # 拼接结果
-    for i in index:
-        r += (p[i].name + ';')
-    return {'code': code, 'result': r}
 
-
-def select_poeple2(data):
-    identify, s,text = data.values()
-    # 已经抽取的人名单
-    b = text.split(';')
+def select_people(data,status):
+    identify = data['identify']
+    s = data['sum']
     p = list(session.query(People).filter(People.identify == identify))
-    # 剔除已经抽取的人，在剩余人员中进行抽取
     c = []
-    for i in p:
-        if i.name not in b:
+    if status == '1':
+        for i in p:
             c.append(i.name)
-    # 人抽完了
-    if len(c) == 0:
+    if status == '2':
+        # 已经抽取的人名单
+        b = data['text'].split(';')
+        # 剔除已经抽取的人，在剩余人员中进行抽取
+        c = []
+        for i in p:
+            if i.name not in b:
+                c.append(i.name)
+    # 没有这类专家
+    if not len(c):
         return {'code': -1, 'result': ''}
     # 人数少于要抽出的人数
     elif len(c) <= int(s):
@@ -137,12 +122,9 @@ def select_poeple2(data):
     return {'code': code, 'result': r}
 
 
-
 def add_log(data: dict) -> dict:
-    name, time, department, people, word1, word2, start_time, end_time, identify, s,s2,word3,r,r2 = data.values()
+    name, time, department, people, word1, word2, start_time, end_time, identify, s, s2, word3, r, r2 = data.values()
 
-    print(data)
-    # 添加记录
     log = Log(
         id=get_random_id(),
         name=name, 
@@ -172,19 +154,19 @@ def download_excel(id : str):
     b = Workbook(fp,{'in_memory': True})
     s = b.add_worksheet('Sheet1')
     data = {
-            '事项名称: ':p.name,
-            '受理时间: ':p.time,
-            '申请单位: ':p.department,
-            '联系人: ':p.people,
-            '专家评审内容: ':p.word1,
-            '评审专家、领域等事项: ':p.word2,
-            '组织时间: ':p.startTime + "/" + p.endTime,
-            '类别: ':p.identify,
-            '抽取人数: ':p.sum,
-            '抽取名单: ':p.human,
-            '补抽人数: ':p.sum2,
-            '补抽名单: ':p.human2,
-            '备注: ':p.word3,
+        '事项名称: ':p.name,
+        '受理时间: ':p.time,
+        '申请单位: ':p.department,
+        '联系人: ':p.people,
+        '专家评审内容: ':p.word1,
+        '评审专家、领域等事项: ':p.word2,
+        '组织时间: ':p.startTime + "/" + p.endTime,
+        '类别: ':p.identify,
+        '抽取人数: ':p.sum,
+        '抽取名单: ':p.human,
+        '补抽人数: ':p.sum2,
+        '补抽名单: ':p.human2,
+        '备注: ':p.word3,
     }
     s.write_row('A1', list(data.keys()))
     x = 65
@@ -199,6 +181,8 @@ def download_excel(id : str):
 def del_log(id : str):
     if id == 'all':
         session.query(Log).delete()
+        session.commit()
+        session.close()
         return {'code': -1}
     log = session.query(Log).filter(Log.id == id)[0]
     session.delete(log)
@@ -206,15 +190,19 @@ def del_log(id : str):
     session.close()
     return {'code': 1}
 
+
 def get_all_log():
     return session.query(Log).all()
+    
     
 def get_people():
     return session.query(People).all()
 
-def get_info(id):
-    p = session.query(People).filter(People.id == id)[0]
-    data = {
+
+def get_info(status,id):
+    if status == 'people':
+        p = session.query(People).filter(People.id == id)[0]
+        data = {
             '姓名: ':p.name,
             '性别: ':p.sex,
             '身份证: ':p.human_id,
@@ -230,15 +218,10 @@ def get_info(id):
             '电话: ':p.phone,
             '邮件: ':p.email,
             '类别: ':p.identify
-    }
-    c = ''
-    for k,v in data.items():
-        c += (k + v + "\n")
-    return c
-
-def get_log(id):
-    p = session.query(Log).filter(Log.id == id)[0]
-    data = {
+        }
+    if status == 'log':
+        p = session.query(Log).filter(Log.id == id)[0]
+        data = {
             '事项名称: ':p.name,
             '受理时间: ':p.time,
             '申请单位: ':p.department,
@@ -252,8 +235,8 @@ def get_log(id):
             '补抽人数: ':p.sum2,
             '补抽名单: ':p.human2,
             '备注: ':p.word3,
-    }
+        }
     c = ''
-    for k,v in data.items():
+    for k, v in data.items():
         c += (k + v + "\n")
     return c
