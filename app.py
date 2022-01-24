@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-18 14:24:01
+LastEditTime: 2022-01-24 21:01:47
 '''
 
 import json
@@ -32,14 +32,19 @@ def login_page():
 
 @app.route('/index', methods=['GET'])
 def index_page():
-    return render_template('index.html')
+    if request.method == 'GET':
+        return render_template('index.html')
 
 
-@app.route('/data', methods=['GET'])
+@app.route('/data', methods=['GET','POST'])
 def data_page():
-    data = get_people()
-    return render_template('data.html', data = data)
-
+    if request.method == 'GET':
+        data = get_people()
+        return render_template('data.html', data = data,status=-1)
+    if request.method == 'POST':
+        f = request.files['file']
+        data = get_people()
+        return render_template('data.html', data = data,status= read_excel(f))
 
 @app.route('/log', methods=['GET'])
 def log_page():
@@ -61,17 +66,10 @@ def add():
     data = json.loads(request.get_data())
     return add_log(data)
 
-# 上传文件
-@app.route('/upload', methods=['POST'])
-def upload():
-    f = request.files['file']
-    return read_excel(f)
-
 
 @app.route('/download/<id>', methods=['GET'])
 def download(id):
     response = download_excel(id)
-    print("response",type(response))
     response.headers['Content-Type'] = "utf-8"
     response.headers["Cache-Control"] = "no-cache"
     response.headers["Content-Disposition"] = "attachment; filename=download.xlsx"

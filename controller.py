@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-18 14:54:04
+LastEditTime: 2022-01-24 18:25:36
 '''
 
 from dis import findlabels
@@ -85,7 +85,7 @@ def read_excel(f):
     session.commit()
     session.close()
     os.remove("static/" + f.filename)
-    return {'code': 1}
+    return 1
 
 def select_poeple(data):
     identify, s = data.values()

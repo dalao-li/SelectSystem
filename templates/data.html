@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 12:44:48
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-18 18:33:38
+ * @LastEditTime: 2022-01-24 18:24:38
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -33,20 +33,21 @@
         <button type="button" class="btn btn-success flex-fill btn-lg" onclick="a('')">退出登陆</button>
     </div>
     <div class="container">
-        <div class="input-group mb-3">
-            <div class="alert alert-danger">注意!新上传的文件会覆盖之前的数据</div>
+        {% if status == 1%}
+        <div class="alert alert-success">
+            <strong>上传成功!</strong>
         </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">仅限Excel</span>
+        {% endif %}
+        <div class="alert alert-danger">注意!新上传的文件会覆盖之前的数据</div>
+        <form action="/data" method="POST" enctype="multipart/form-data" onsubmit="return upload()">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">仅限Excel</span>
+                </div>
+                <input id="file" class="btn btn-info" name="file" type="file" />
+                <input type="submit" class="btn btn-success btn-lg" value="提交"></input>
             </div>
-            <label for="name"></label>
-            <input id="file" class="btn btn-info" name="file" type="file" />
-        </div>
-
-        <div class="input-group mb-3">
-            <button type="button" onclick="upload()" class="btn btn-success">提交</button>
-        </div>
+        </form>
 
         <div>
             <table class="table table-hover" id="infoTable">
@@ -68,7 +69,8 @@
                         <td>{{ i.sex }}</td>
                         <td>{{ i.department }}</td>
                         <td>{{ i.identify }}</td>
-                        <td><button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button></td>
+                        <td><button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -93,35 +95,14 @@
         const f = document.getElementById("file").files[0]
         if (!f) {
             alert("请选择上传文件")
-            return
+            return false
         }
         const format = f.name.split('.')[1]
         if (format != 'xlsx' && format != 'xls') {
             alert("上传文件不是Excel文件!请重试")
-            return
+            return false
         }
-        var form = new FormData()
-        form.append("file", f)
-        $.ajax({
-            async: false,
-            type: "POST",
-            url: "/upload",
-            data: form,
-            dataType: "JSON",
-            mimeType: "multipart/form-data",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (data) {
-                if (data.code == 1) {
-                    alert("上传成功")
-                    location.reload()
-                }
-            },
-            error: function () {
-                alert("网络异常，请稍后重试")
-            }
-        })
+        return true
     }
 
 
