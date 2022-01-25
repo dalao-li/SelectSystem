@@ -5,12 +5,11 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-25 22:07:13
+LastEditTime: 2022-01-25 22:43:14
 '''
 
-from dis import findlabels
 import random,os,io
-from struct import pack
+from re import L
 import xlrd
 from xlsxwriter import *
 from models import *
@@ -106,7 +105,12 @@ def select_people(data,status):
                 c.append(i.name)
     # 没有这类专家
     if not len(c):
-        return {'code': -1, 'result': ''}
+        if status == '1':
+            return {'code': -1, 'result': ''}
+        # 第一次就抽取完了
+        if status == '2':
+            return {'code': -2, 'result': ''}
+        
     # 人数少于要抽出的人数
     elif len(c) <= int(s):
         code = 0

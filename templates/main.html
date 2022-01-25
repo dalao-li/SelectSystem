@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-25 21:46:07
+ * @LastEditTime: 2022-01-25 22:55:35
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -111,7 +111,7 @@
                     <option value="5">5</option>
                 </select>
 
-                <button type="button" class="btn btn-success" onclick="select1()">抽取</button>
+                <button type="button" class="btn btn-success" onclick="select('1')">抽取</button>
                 <button type="button" class="btn btn-warning" onclick="clear()">清除</button>
             </div>
 
@@ -130,7 +130,7 @@
                     <option value="5">5</option>
                 </select>
 
-                <button type="button" class="btn btn-danger" onclick="select2()">补充抽取</button>
+                <button type="button" class="btn btn-danger" onclick="select('2')">补充抽取</button>
             </div>
 
             <div class="alert alert-success" id="result2">补充抽取结果:<span></span></div>
@@ -145,60 +145,58 @@
 </body>
 
 <script>
-    function a(url) {
-        location.href = '/' + url
-    }
+    function select(status) {
+        const d = {}
+        if (status == '1') {
+            d['identify'] = $('#identify').val()
+            d['sum'] = $('#sum').val()
 
-    function select1() {
-        const d = {
-            'identify': $('#identify').val(),
-            'sum': $('#sum').val()
         }
+        if (status == '2') {
+            const sum = $('#sum2').val()
+            const text = document.getElementById('result').innerText
+            if (sum2 == '0') {
+                alert('请选择补抽人数')
+                return
+            }
+            if (text == '抽取结果:') {
+                alert('请先抽签')
+                return
+            }
+            d['identify'] = $('#identify').val()
+            d['sum'] = sum
+            d['text'] = text.split(':')[1]
 
-        $.post('/select/1', JSON.stringify(d), function (data) {
+        }
+        $.post('/select/' + status, JSON.stringify(d), function (data) {
             if (data.code == -1) {
                 alert('暂无该类专家，请确认')
                 return
             }
-            if (data.code == 0) {
-                alert('抽取人数小于实际人数，已全部抽取')
-            }
-            document.getElementById('result').innerText = '抽取结果:' + data.result
-        })
-    }
 
-    function clear() {
-        document.getElementById('result').innerText = '抽取结果:'
-    }
-
-    function select2() {
-        const identify = $('#identify').val()
-        const sum2 = $('#sum2').val()
-        const text = document.getElementById('result').innerText
-        if (sum2 == '0') {
-            alert('请选择补抽人数')
-            return
-        }
-        if (text == '抽取结果:') {
-            alert('请先抽签')
-            return
-        }
-        const d = {
-            'identify': identify,
-            'sum': sum2,
-            'text': text.split(':')[1]
-        }
-        $.post('/select/2', JSON.stringify(d), function (data) {
-            if (data.code == -1) {
+            if (data.code == -2) {
                 alert('该类专家已被抽取完')
                 return
             }
             if (data.code == 0) {
                 alert('补充抽取人数小于可抽取人数，已全部抽取')
             }
-            document.getElementById('result2').innerText = '补充抽取结果:' + data.result
+
+            if (status == '1') {
+                document.getElementById('result').innerText = '抽取结果:' + data.result
+            }
+            if (status == '2') {
+                document.getElementById('result2').innerText = '补充抽取结果:' + data.result
+            }
+
         })
     }
+
+
+    function clear() {
+        document.getElementById('result').innerText = '抽取结果:'
+    }
+
 
     function add() {
         const d = {}
