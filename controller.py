@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-26 21:08:28
+LastEditTime: 2022-01-26 22:44:25
 '''
 
 import random,os,io
@@ -62,7 +62,7 @@ def read_excel(f):
             school = i[4],
             department = i[5],
             rank = i[6],
-            rank_id=i[7],
+            rank_id = i[7],
             professional1 = i[8],
             professional2 = i[9],
             professional3 = i[10],
@@ -151,25 +151,25 @@ def add_log(data: dict) -> dict:
     return {'code': 1}
 
 # 下载抽签记录
-def download_excel(id : str):
+def download_excel(id: str):
     p = session.query(Log).filter(Log.id == id)[0]
     fp = io.BytesIO()
-    b = Workbook(fp,{'in_memory': True})
+    b = Workbook(fp, {'in_memory': True})
     s = b.add_worksheet('Sheet1')
     data = {
-        '事项名称: ':p.name,
-        '受理时间: ':p.time,
-        '申请单位: ':p.department,
-        '联系人: ':p.people,
-        '专家评审内容: ':p.word1,
-        '评审专家、领域等事项: ':p.word2,
-        '组织时间: ':p.startTime + "/" + p.endTime,
-        '类别: ':p.identify,
-        '抽取人数: ':p.sum,
-        '抽取名单: ':p.human,
-        '补抽人数: ':p.sum2,
-        '补抽名单: ':p.human2,
-        '备注: ':p.word3,
+        '事项名称: ': p.name,
+        '受理时间: ': p.time,
+        '申请单位: ': p.department,
+        '联系人: ': p.people,
+        '专家评审内容: ': p.word1,
+        '评审专家、领域等事项: ': p.word2,
+        '组织时间: ': p.startTime + "/" + p.endTime,
+        '类别: ': p.identify,
+        '抽取人数: ': p.sum,
+        '抽取名单: ': p.human,
+        '补抽人数: ': p.sum2,
+        '补抽名单: ': p.human2,
+        '备注: ': p.word3,
     }
     s.write_row('A1', list(data.keys()))
     x = 65
@@ -206,21 +206,21 @@ def get_info(table, id):
     if table == 'people':
         p = session.query(People).filter(People.id == id)[0]
         data = {
-            '姓名: ':p.name,
-            '性别: ':p.sex,
-            '身份证: ':p.human_id,
-            '学校: ':p.school,
-            '工作单位: ':p.department,
-            '职称: ':p.rank,
-            '职称编号: ':p.rank_id,
-            '专业1: ':p.professional1,
-            '专业2: ':p.professional2,
-            '专业3: ':p.professional3,
-            '专业4: ':p.professional4,
-            '专业4: ':p.professional5,
-            '电话: ':p.phone,
-            '邮件: ':p.email,
-            '类别: ':p.identify
+            '姓名: ': p.name,
+            '性别: ': p.sex,
+            '身份证: ': p.human_id,
+            '学校: ': p.school,
+            '工作单位: ': p.department,
+            '职称: ': p.rank,
+            '职称编号: ': p.rank_id,
+            '专业1: ': p.professional1,
+            '专业2: ': p.professional2,
+            '专业3: ': p.professional3,
+            '专业4: ': p.professional4,
+            '专业4: ': p.professional5,
+            '电话: ':p .phone,
+            '邮件: ': p.email,
+            '类别: ': p.identify
         }
     if table == 'log':
         p = session.query(Log).filter(Log.id == id)[0]

@@ -5,89 +5,63 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 12:44:48
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-24 22:41:06
+ * @LastEditTime: 2022-01-26 22:21:59
 -->
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Title</title>
+{% extends "layout.html" %}
 
-    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap-table.min.css') }}">
-    <script src="{{ url_for('static',filename='jquery.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='popper.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='bootstrap-table.min.js') }}"></script>
+{% block title %}导入数据{% endblock %}
 
-</head>
+{% block content %}
 
-<body>
-    <nav class="navbar navbar-expand-sm bg-light justify-content-center">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/main">开始抽签</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/data">导入数据</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/log">抽签记录</a>
-            </li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        {% if status == 1%}
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            <strong>上传成功!</strong>
-        </div>
-        {% endif %}
-        <div class="alert alert-danger alert-dismissible">
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            <strong>注意!</strong>新上传的文件会覆盖之前的数据
-        </div>
-
-        <form action="/data" method="POST" enctype="multipart/form-data" onsubmit="return upload()">
-            <div class="input-group mb-3">
-                <span class="input-group-text">仅限Excel</span>
-                <input id="file" class="btn btn-info" name="file" type="file" />
-                <input type="submit" class="btn btn-success" value="提交"></input>
-            </div>
-        </form>
-
-        <div>
-            <table class="table table-hover" id="infoTable">
-                <thead>
-                    <tr>
-                        <th>序号</th>
-                        <th>姓名</th>
-                        <th>性别</th>
-                        <th>工作单位</th>
-                        <th>类别</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for i in data %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ i.name }}</td>
-                        <td>{{ i.sex }}</td>
-                        <td>{{ i.department }}</td>
-                        <td>{{ i.identify }}</td>
-                        <td><button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+<div class="container">
+    {% if status == 1%}
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>上传成功!</strong>
     </div>
+    {% endif %}
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>注意!</strong>新上传的文件会覆盖之前的数据
+    </div>
+
+    <form action="/data" method="POST" enctype="multipart/form-data" onsubmit="return upload()">
+        <div class="input-group mb-3">
+            <span class="input-group-text">仅限Excel</span>
+            <input id="file" class="btn btn-info" name="file" type="file" />
+            <input type="submit" class="btn btn-success" value="提交"></input>
+        </div>
+    </form>
+
+    <div>
+        <table class="table table-hover" id="infoTable">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>工作单位</th>
+                    <th>类别</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.sex }}</td>
+                    <td>{{ i.department }}</td>
+                    <td>{{ i.identify }}</td>
+                    <td><button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 
 <script src="{{ url_for('static',filename='bootstrap-table-zh-CN.min.js') }}"></script>
@@ -129,4 +103,4 @@
     })
 </script>
 
-</html>
+{% endblock %}

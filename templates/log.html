@@ -5,71 +5,45 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-24 22:27:45
+ * @LastEditTime: 2022-01-26 22:27:30
 -->
 
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Title</title>
+{% block title %}抽签记录{% endblock %}
 
-    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap-table.min.css') }}">
-    <script src="{{ url_for('static',filename='jquery.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='popper.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='bootstrap-table.min.js') }}"></script>
-</head>
+{% block content %}
 
-<body>
-    <nav class="navbar navbar-expand-sm bg-light justify-content-center">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="/main">开始抽签</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/data">导入数据</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/log">抽签记录</a>
-            </li>
-        </ul>
-    </nav>
-
-    <div class="container">
-        <div>
-            <table class="table table-hover" id="infoTable">
-                <thead>
-                    <tr>
-                        <th>序号</th>
-                        <th>事项名称</th>
-                        <th>受理时间</th>
-                        <th>申请单位</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for i in data %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ i.name }}</td>
-                        <td>{{ i.time }}</td>
-                        <td>{{ i.department }}</td>
-                        <td>
-                            <button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button>
-                            <button type="button" class="btn btn-success" id="{{ i.id }}" onclick=download()>下载</button>
-                            <button type="button" class="btn btn-danger" id="{{ i.id }}" onclick=del()>删除</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+<div class="container">
+    <div>
+        <table class="table table-hover" id="infoTable">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>事项名称</th>
+                    <th>受理时间</th>
+                    <th>申请单位</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.time }}</td>
+                    <td>{{ i.department }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button>
+                        <button type="button" class="btn btn-success" id="{{ i.id }}" onclick=download()>下载</button>
+                        <button type="button" class="btn btn-danger" id="{{ i.id }}" onclick=del()>删除</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+</div>
 </body>
 
 <script src="{{ url_for('static',filename='bootstrap-table-zh-CN.min.js') }}"></script>
@@ -83,18 +57,16 @@
     }
 
     function del() {
-        $.get('/del/' + event.target.id, function () {
+        $.get('/del/' + event.target.id, function (data) {
             location.reload()
             alert("删除成功")
         })
-
     }
 
     function get() {
         $.get('/get/log/' + event.target.id, function (data) {
             alert(data)
         })
-
     }
 
     function clear() {
@@ -120,4 +92,4 @@
     })
 </script>
 
-</html>
+{% endblock %}
