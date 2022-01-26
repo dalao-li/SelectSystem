@@ -5,10 +5,12 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-25 22:04:34
+LastEditTime: 2022-01-26 21:08:42
 '''
 
 import json
+
+import datetime
 
 from flask import Flask, render_template, request, redirect,url_for
 
@@ -40,11 +42,12 @@ def main_page():
 def data_page():
     if request.method == 'GET':
         data = get_people()
-        return render_template('data.html', data = data,status=-1)
+        return render_template('data.html', data = data, status = -1)
     if request.method == 'POST':
         f = request.files['file']
         data = get_people()
-        return render_template('data.html', data = data,status= read_excel(f))
+        status = read_excel(f)
+        return render_template('data.html', data = data, status = status)
 
 @app.route('/log', methods=['GET'])
 def log_page():
@@ -69,17 +72,18 @@ def download(id):
     response = download_excel(id)
     response.headers['Content-Type'] = "utf-8"
     response.headers["Cache-Control"] = "no-cache"
-    response.headers["Content-Disposition"] = "attachment; filename=download.xlsx"
+    name = datetime.datetime.now()
+    response.headers["Content-Disposition"] = "attachment; filename=" + str(name) + ".xlsx"
     return response
 
 
-@app.route('/del/<id>' , methods=['GET'])
+@app.route('/del/<id>', methods=['GET'])
 def delete(id):
     return del_log(id)
 
-@app.route('/get/<status>/<id>' , methods=['GET'])
-def get(status,id):
-    return get_info(status, id)
+@app.route('/get/<table>/<id>', methods=['GET'])
+def get(table,id):
+    return get_info(table, id)
 
 
 if __name__ == '__main__':

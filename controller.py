@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-25 22:43:14
+LastEditTime: 2022-01-26 21:08:28
 '''
 
 import random,os,io
@@ -50,27 +50,27 @@ def read_excel(f):
             continue
         # 将float数据转为str
         for z in range(len(i)):
-            if isinstance(i[z],float):
+            if isinstance(i[z], float):
                 i[z] = str(int(i[z]))
             i[z].strip('\n')
-            i[z].replace(" ","")
+            i[z].replace(" ", "")
         p = People(
-            id=get_random_id(),
-            name=i[1],
-            sex=i[2],
-            human_id=i[3],
-            school=i[4],
-            department=i[5],
-            rank=i[6],
+            id = get_random_id(),
+            name = i[1],
+            sex = i[2],
+            human_id = i[3],
+            school = i[4],
+            department = i[5],
+            rank = i[6],
             rank_id=i[7],
-            professional1=i[8],
-            professional2=i[9],
-            professional3=i[10],
-            professional4=i[11],
-            professional5=i[12],
-            phone=i[13],
-            email=i[14],
-            identify=i[15]
+            professional1 = i[8],
+            professional2 = i[9],
+            professional3 = i[10],
+            professional4 = i[11],
+            professional5 = i[12],
+            phone = i[13],
+            email = i[14],
+            identify = i[15]
         )
         a.append(p)
     try:
@@ -110,7 +110,6 @@ def select_people(data,status):
         # 第一次就抽取完了
         if status == '2':
             return {'code': -2, 'result': ''}
-        
     # 人数少于要抽出的人数
     elif len(c) <= int(s):
         code = 0
@@ -130,18 +129,18 @@ def add_log(data: dict) -> dict:
     name, time, department, people, word1, word2, start_time, end_time, identify, s, s2, word3, r, r2 = data.values()
 
     log = Log(
-        id=get_random_id(),
-        name=name, 
-        time=time, 
-        department=department, 
-        people=people, 
-        word1=word1, 
-        word2=word2,
-        startTime=start_time, 
-        endTime=end_time, 
-        identify=identify, 
-        sum=s, 
-        human=r,
+        id = get_random_id(),
+        name = name, 
+        time = time, 
+        department = department, 
+        people = people, 
+        word1 = word1, 
+        word2 = word2,
+        startTime = start_time, 
+        endTime = end_time, 
+        identify = identify, 
+        sum = s, 
+        human = r,
         sum2 = s2,
         human2 = r2,
         word3 = word3
@@ -174,15 +173,15 @@ def download_excel(id : str):
     }
     s.write_row('A1', list(data.keys()))
     x = 65
-    for v in data.values() :
-        s.write( chr(x) + '2',v)
+    for v in data.values():
+        s.write( chr(x) + '2', v)
         x += 1
     b.close()
     response = make_response(fp.getvalue())
     fp.close()
     return response
 
-def del_log(id : str):
+def del_log(id: str):
     if id == 'all':
         session.query(Log).delete()
         session.commit()
@@ -203,8 +202,8 @@ def get_people():
     return session.query(People).all()
 
 
-def get_info(status,id):
-    if status == 'people':
+def get_info(table, id):
+    if table == 'people':
         p = session.query(People).filter(People.id == id)[0]
         data = {
             '姓名: ':p.name,
@@ -223,22 +222,22 @@ def get_info(status,id):
             '邮件: ':p.email,
             '类别: ':p.identify
         }
-    if status == 'log':
+    if table == 'log':
         p = session.query(Log).filter(Log.id == id)[0]
         data = {
-            '事项名称: ':p.name,
-            '受理时间: ':p.time,
-            '申请单位: ':p.department,
-            '联系人: ':p.people,
-            '专家评审内容: ':p.word1,
-            '评审专家、领域等事项: ':p.word2,
-            '组织时间: ':p.startTime + "/" + p.endTime,
-            '类别: ':p.identify,
-            '抽取人数: ':p.sum,
-            '抽取名单: ':p.human,
-            '补抽人数: ':p.sum2,
-            '补抽名单: ':p.human2,
-            '备注: ':p.word3,
+            '事项名称: ': p.name,
+            '受理时间: ': p.time,
+            '申请单位: ': p.department,
+            '联系人: ': p.people,
+            '专家评审内容: ': p.word1,
+            '评审专家、领域等事项: ': p.word2,
+            '组织时间: ': p.startTime + "/" + p.endTime,
+            '类别: ': p.identify,
+            '抽取人数: ': p.sum,
+            '抽取名单: ': p.human,
+            '补抽人数: ': p.sum2,
+            '补抽名单: ': p.human2,
+            '备注: ': p.word3,
         }
     c = ''
     for k, v in data.items():
