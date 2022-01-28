@@ -5,31 +5,33 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-26 21:08:42
+LastEditTime: 2022-01-28 19:50:16
 '''
 
 import json
 
 import datetime
 
-from flask import Flask, render_template, request, redirect,url_for
+from flask import Flask, render_template, request, redirect, url_for
 
 from controller import *
 
 app = Flask(__name__)
 
 
-@app.route('/',methods=['GET','POST'])
+app.secret_key='123' 
+
+@app.route('/', methods=['GET', 'POST'])
 def login_page():
     if request.method == 'GET':
-        return render_template('login.html',status=1)
+        return render_template('login.html', status = 1)
     if request.method == 'POST':
         name = request.form.get("name")
         pwd = request.form.get("pwd")
         if name == 'admin' and pwd == 'admin':
             return redirect(url_for('main_page'))
         else :
-            return render_template('login.html',status=-1)
+            return render_template('login.html', status = -1)
 
 
 @app.route('/main', methods=['GET'])
@@ -45,8 +47,8 @@ def data_page():
         return render_template('data.html', data = data, status = -1)
     if request.method == 'POST':
         f = request.files['file']
-        data = get_people()
         status = read_excel(f)
+        data = get_people()
         return render_template('data.html', data = data, status = status)
 
 @app.route('/log', methods=['GET'])

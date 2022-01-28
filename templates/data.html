@@ -5,12 +5,14 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 12:44:48
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-26 22:21:59
+ * @LastEditTime: 2022-01-28 19:51:16
 -->
 
 {% extends "layout.html" %}
 
-{% block title %}导入数据{% endblock %}
+{% block title %}
+导入数据
+{% endblock %}
 
 {% block content %}
 
@@ -21,6 +23,7 @@
         <strong>上传成功!</strong>
     </div>
     {% endif %}
+
     <div class="alert alert-danger alert-dismissible">
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         <strong>注意!</strong>新上传的文件会覆盖之前的数据
