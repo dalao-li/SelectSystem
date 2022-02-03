@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2022-01-10 10:38:26
 LastEditors: DaLao
-LastEditTime: 2022-01-28 19:50:16
+LastEditTime: 2022-01-28 22:14:25
 '''
 
 import json
@@ -84,8 +84,9 @@ def delete(id):
     return del_log(id)
 
 @app.route('/get/<table>/<id>', methods=['GET'])
-def get(table,id):
+def get(table, id):
     return get_info(table, id)
+
 
 
 if __name__ == '__main__':

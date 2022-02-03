@@ -5,7 +5,7 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-26 22:44:25
+LastEditTime: 2022-01-28 20:48:16
 '''
 
 import random,os,io
@@ -171,11 +171,10 @@ def download_excel(id: str):
         '补抽名单: ': p.human2,
         '备注: ': p.word3,
     }
+    # 写入标题
     s.write_row('A1', list(data.keys()))
-    x = 65
-    for v in data.values():
-        s.write( chr(x) + '2', v)
-        x += 1
+    # 写入数据
+    s.write_row('A2', list(data.values()))
     b.close()
     response = make_response(fp.getvalue())
     fp.close()
