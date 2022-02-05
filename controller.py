@@ -5,15 +5,13 @@ Author: DaLao
 Email: dalao_li@163.com
 Date: 2021-12-31 22:25:47
 LastEditors: DaLao
-LastEditTime: 2022-01-28 20:48:16
+LastEditTime: 2022-02-05 23:37:25
 '''
 
 import random,os,io
-from re import L
 import xlrd
 from xlsxwriter import *
 from models import *
-from flask import make_response
 
 def get_random_id()-> str:
     a = 'abcdefghijklmnopqrstuvwxyz123456'
@@ -87,15 +85,15 @@ def read_excel(f):
     return 1
 
 
-def select_people(data,status):
+def select_people(data, id):
     identify = data['identify']
     s = data['sum']
     p = list(session.query(People).filter(People.identify == identify))
     c = []
-    if status == '1':
+    if id == '1':
         for i in p:
             c.append(i.name)
-    if status == '2':
+    if id == '2':
         # 已经抽取的人名单
         b = data['text'].split(';')
         # 剔除已经抽取的人，在剩余人员中进行抽取
@@ -105,22 +103,22 @@ def select_people(data,status):
                 c.append(i.name)
     # 没有这类专家
     if not len(c):
-        if status == '1':
+        if id == '1':
             return {'code': -1, 'result': ''}
         # 第一次就抽取完了
-        if status == '2':
+        if id == '2':
             return {'code': -2, 'result': ''}
     # 人数少于要抽出的人数
     elif len(c) <= int(s):
         code = 0
-        index = [i for i in range(len(c))]
+        j = [i for i in range(len(c))]
     else:
         code = 1
         # 产生sum个随机数，记录下标
-        index = random.sample(range(0, len(c)), int(s))
+        j = random.sample(range(0, len(c)), int(s))
     r = ""
     # 拼接结果
-    for i in index:
+    for i in j:
         r += (c[i] + ';')
     return {'code': code, 'result': r}
 
@@ -176,9 +174,8 @@ def download_excel(id: str):
     # 写入数据
     s.write_row('A2', list(data.values()))
     b.close()
-    response = make_response(fp.getvalue())
-    fp.close()
-    return response
+    #fp.close()
+    return fp.getvalue()
 
 def del_log(id: str):
     if id == 'all':

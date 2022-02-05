@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 13:06:30
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-26 22:27:30
+ * @LastEditTime: 2022-02-05 23:44:54
 -->
 
 {% extends "layout.html" %}
@@ -53,24 +53,24 @@
     }
 
     function download() {
-        location.href = '/download/' + event.target.id
+        location.href = '/api/get/download_log/' + event.target.id
     }
 
     function del() {
-        $.get('/del/' + event.target.id, function (data) {
+        $.get('/api/del/log/' + event.target.id, function (data) {
             location.reload()
             alert("删除成功")
         })
     }
 
     function get() {
-        $.get('/get/log/' + event.target.id, function (data) {
+        $.get('/api/get/log_info/' + event.target.id, function (data) {
             alert(data)
         })
     }
 
     function clear() {
-        $.get('/del/all', function () {
+        $.get('/api/del/log/all', function () {
             location.reload()
             alert("清空成功")
         })

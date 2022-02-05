@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 08:08:19
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-28 19:48:07
+ * @LastEditTime: 2022-02-06 00:07:29
 -->
 
 {% extends "layout.html" %}
@@ -123,13 +123,13 @@
 </div>
 
 <script>
-    function select(status) {
+    function select(id) {
         const d = {}
-        if (status == '1') {
+        if (id == '1') {
             d['identify'] = $('#identify').val()
             d['sum'] = $('#sum').val()
         }
-        if (status == '2') {
+        if (id == '2') {
             const sum = $('#sum2').val()
             const text = document.getElementById('result').innerText
             if (sum2 == '0') {
@@ -144,7 +144,7 @@
             d['sum'] = sum
             d['text'] = text.split(':')[1]
         }
-        $.post('/select/' + status, JSON.stringify(d), function (data) {
+        $.post('/api/get/select_people/' + id, JSON.stringify(d), function (data) {
             if (data.code == -1) {
                 alert('暂无该类专家，请确认')
                 return
@@ -156,10 +156,10 @@
             if (data.code == 0) {
                 alert('补充抽取人数小于可抽取人数，已全部抽取')
             }
-            if (status == '1') {
+            if (id == '1') {
                 document.getElementById('result').innerText = '抽取结果:' + data.result
             }
-            if (status == '2') {
+            if (id == '2') {
                 document.getElementById('result2').innerText = '补充抽取结果:' + data.result
             }
         })
@@ -187,7 +187,7 @@
         d['r'] = r.split(':')[1]
         d['r2'] = r2.split(':')[1]
 
-        $.post('/add', JSON.stringify(d), function (data) {
+        $.post('/api/add/log/1', JSON.stringify(d), function (data) {
             if (data.code == 1) {
                 alert('提交成功')
                 location.reload()
