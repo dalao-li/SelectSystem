@@ -82,7 +82,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">人员分类</span>
                 </div>
-                <select class="form-control" name="identify" id="identify">
+                <label for="identify"></label><select class="form-control" name="identify" id="identify">
                     <option value="水务类">水务类</option>
                     <option value="工程消费类">工程消费类</option>
                     <option value="卫生健康类">卫生健康类</option>
@@ -105,7 +105,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">抽取人数</span>
                 </div>
-                <select class="form-control" name="sum" id="sum">
+                <label for="sum"></label><select class="form-control" name="sum" id="sum">
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
@@ -121,7 +121,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text">补充抽取人数</span>
                 </div>
-                <select class="form-control" name="sum2" id="sum2">
+                <label for="sum2"></label><select class="form-control" name="sum2" id="sum2">
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -140,7 +140,7 @@
                     <span class="input-group-text">备注</span>
                 </div>
                 <label for="name"></label>
-                <textarea class="form-control" rows="3" id="word3" name="word3"></textarea>
+                <label for="word3"></label><textarea class="form-control" rows="3" id="word3" name="word3"></textarea>
             </div>
         </form>
         <button type="button" class="btn btn-warning" onclick="add()">提交</button>
@@ -152,22 +152,48 @@
         location.href = '/' + url
     }
 
-    function select1() {
-        const identify = $('#identify').val()
-        const sum = $('#sum').val()
-        const d = {
-            'identify': identify,
-            'sum': sum
+    function select(id) {
+        const d = {}
+        if (id === 'first') {
+            d['identify'] = $('#identify').val()
+            d['sum'] = $('#sum').val()
         }
-        $.post('/select/first', JSON.stringify(d), function (data) {
-            if (data.code == -1) {
+        if (id === 'second') {
+            const sum = $('#sum2').val()
+            const text = document.getElementById('result').innerText
+            if (sum === '0') {
+                alert('请选择补抽人数')
+                return
+            }
+            if (text === '抽取结果:') {
+                alert('请先抽签')
+                return
+            }
+            d['identify'] = $('#identify').val()
+            d['sum'] = sum
+            d['text'] = text.split(':')[1]
+        }
+        $.post('/select/' + id, JSON.stringify(d), function (data) {
+            if (data.code === -1) {
                 alert('暂无该类专家，请确认')
                 return
             }
-            if (data.code == 0) {
+            if (data.code === -2) {
+                alert('该类专家已被抽取完')
+                return
+            }
+            if (data.code === 2) {
                 alert('抽取人数小于实际人数，已全部抽取')
             }
-            document.getElementById('result').innerText = '抽取结果:' + data.result
+            if (data.code === 3) {
+                alert('补充抽取人数小于可抽取人数，已全部抽取')
+            }
+            if (id === 'first') {
+                document.getElementById('result').innerText = '抽取结果:' + data.result
+            }
+            if (id === 'second') {
+                document.getElementById('result2').innerText = '补充抽取结果:' + data.result
+            }
         })
     }
 
@@ -175,34 +201,6 @@
         document.getElementById('result').innerText = '抽取结果:'
     }
 
-    function select2() {
-        const identify = $('#identify').val()
-        const sum2 = $('#sum2').val()
-        const text = document.getElementById('result').innerText
-        if (sum2 == '0') {
-            alert('请选择补抽人数')
-            return
-        }
-        if (text == '抽取结果:') {
-            alert('请先抽签')
-            return
-        }
-        const d = {
-            'identify': identify,
-            'sum2': sum2,
-            'text': text.split(':')[1]
-        }
-        $.post('/select/second', JSON.stringify(d), function (data) {
-            if (data.code == -1) {
-                alert('该类专家已被抽取完')
-                return
-            }
-            if (data.code == 0) {
-                alert('补充抽取人数小于可抽取人数，已全部抽取')
-            }
-            document.getElementById('result2').innerText = '补充抽取结果:' + data.result
-        })
-    }
 
     function add() {
         const d = {}
@@ -210,10 +208,10 @@
         $.each(t, function () {
             d[this.name] = this.value
         })
-        var r = document.getElementById('result').innerText
-        var r2 = document.getElementById('result2').innerText
+        const r = document.getElementById('result').innerText;
+        const r2 = document.getElementById('result2').innerText;
 
-        if (r == '抽取结果:') {
+        if (r === '抽取结果:') {
             alert("请抽签")
             return
         }
@@ -221,10 +219,9 @@
         d['r2'] = r2.split(':')[1]
 
         $.post('/add', JSON.stringify(d), function (data) {
-            if (data.code == 1) {
+            if (data.code === 1) {
                 alert('提交成功')
                 location.reload()
-                return
             }
         })
     }

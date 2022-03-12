@@ -71,11 +71,11 @@
     }
 
     function download() {
-        location.href = '/download/' + event.target.id
+        location.href = '/download/' + target.id
     }
 
     function del() {
-        $.get('/del/' + event.target.id, function () {
+        $.get('/del/log/' + target.id, function () {
             location.reload()
             alert("删除成功")
         })
@@ -83,14 +83,14 @@
     }
 
     function get() {
-        $.get('/get/log/' + event.target.id, function (data) {
+        $.get('/get/log/' + target.id, function (data) {
             alert(data)
         })
 
     }
 
     function clear() {
-        $.get('/del/all', function () {
+        $.get('/del/log/all', function () {
             location.reload()
             alert("清空成功")
         })

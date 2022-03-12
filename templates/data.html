@@ -5,7 +5,7 @@
  * @Email: dalao_li@163.com
  * @Date: 2021-12-31 12:44:48
  * @LastEditors: DaLao
- * @LastEditTime: 2022-01-18 18:33:38
+ * @LastEditTime: 2022-03-12 23:54:45
 -->
 <!DOCTYPE html>
 <html lang="en">
@@ -33,9 +33,9 @@
         <button type="button" class="btn btn-success flex-fill btn-lg" onclick="a('')">退出登陆</button>
     </div>
     <div class="container">
-        <div class="input-group mb-3">
+        <!-- <div class="input-group mb-3">
             <div class="alert alert-danger">注意!新上传的文件会覆盖之前的数据</div>
-        </div>
+        </div> -->
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text">仅限Excel</span>
@@ -46,6 +46,7 @@
 
         <div class="input-group mb-3">
             <button type="button" onclick="upload()" class="btn btn-success">提交</button>
+            <button type="button" onclick="del()" class="btn btn-danger">清空全部数据</button>
         </div>
 
         <div>
@@ -84,8 +85,14 @@
     }
 
     function get() {
-        $.get('/get/people/' + event.target.id, function (data) {
+        $.get('/get/people/' + target.id, function (data) {
             alert(data)
+        })
+    }
+
+    function del() {
+        $.get('/del/people/all', function () {
+            alert("清空成功")
         })
     }
 
@@ -96,11 +103,11 @@
             return
         }
         const format = f.name.split('.')[1]
-        if (format != 'xlsx' && format != 'xls') {
+        if (format !== 'xlsx' && format !== 'xls') {
             alert("上传文件不是Excel文件!请重试")
             return
         }
-        var form = new FormData()
+        const form = new FormData();
         form.append("file", f)
         $.ajax({
             async: false,
@@ -113,7 +120,7 @@
             cache: false,
             processData: false,
             success: function (data) {
-                if (data.code == 1) {
+                if (data.code === 1) {
                     alert("上传成功")
                     location.reload()
                 }
