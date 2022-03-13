@@ -38,14 +38,14 @@
         </div> -->
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text">仅限Excel</span>
+                <span class="input-group-text">批量上传，仅限Excel</span>
             </div>
             <label for="name"></label>
             <input id="file" class="btn btn-info" name="file" type="file" />
+            <button type="button" onclick="upload()" class="btn btn-success">提交</button>
         </div>
 
         <div class="input-group mb-3">
-            <button type="button" onclick="upload()" class="btn btn-success">提交</button>
             <button type="button" onclick="del()" class="btn btn-danger">清空全部数据</button>
         </div>
 
@@ -85,7 +85,7 @@
     }
 
     function get() {
-        $.get('/get/people/' + target.id, function (data) {
+        $.get('/get/people/' + event.target.id, function (data) {
             alert(data)
         })
     }
@@ -93,6 +93,7 @@
     function del() {
         $.get('/del/people/all', function () {
             alert("清空成功")
+            location.reload()
         })
     }
 
@@ -120,6 +121,10 @@
             cache: false,
             processData: false,
             success: function (data) {
+                if (data.code === -1) {
+                    alert("文件中缺少人员分类列，请添加")
+                    return
+                }
                 if (data.code === 1) {
                     alert("上传成功")
                     location.reload()

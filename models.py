@@ -8,9 +8,8 @@ LastEditors: DaLao
 LastEditTime: 2022-01-18 03:58:44
 '''
 
+from sqlalchemy import Column, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 Base = declarative_base()

@@ -20,131 +20,142 @@
 </head>
 
 <body>
-    <div id="full" class="d-flex mb-1">
-        <button type="button" class="btn btn-danger flex-fill me-1 btn-lg" onclick="a('index')">开始抽签</button>
-        <button type="button" class="btn btn-warning flex-fill me-1 btn-lg" onclick="a('data')">导入数据</button>
-        <button type="button" class="btn btn-primary flex-fill btn-lg" onclick="a('log')">抽签记录</button>
-        <button type="button" class="btn btn-success flex-fill btn-lg" onclick="a('')">退出登陆</button>
-    </div>
+<div id="full" class="d-flex mb-1">
+    <button type="button" class="btn btn-danger flex-fill me-1 btn-lg" onclick="a('index')">开始抽签</button>
+    <button type="button" class="btn btn-warning flex-fill me-1 btn-lg" onclick="a('data')">导入数据</button>
+    <button type="button" class="btn btn-primary flex-fill btn-lg" onclick="a('log')">抽签记录</button>
+    <button type="button" class="btn btn-success flex-fill btn-lg" onclick="a('')">退出登陆</button>
+</div>
 
-    <div class="container mb-3">
-        <form id="addForm" action="" onsubmit="return false;">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">事项名称</span>
-                </div>
-                <input type="text" class="form-control" id="name" name="name" required />
+<div class="container mb-3">
+    <form id="addForm" action="" onsubmit="return false;">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">事项名称</span>
             </div>
+            <input type="text" class="form-control" id="name" name="name" required/>
+        </div>
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">受理时间</span>
-                </div>
-                <input type="datetime-local" class="form-control" id="time" name="time" />
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">受理时间</span>
             </div>
+            <label for="time"></label>
+            <input type="datetime-local" class="form-control" id="time" name="time"/>
+        </div>
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">申请单位</span>
-                </div>
-                <input type="text" class="form-control" id="department" name="department" />
-                <div class="input-group-prepend">
-                    <span class="input-group-text">联系人</span>
-                </div>
-                <input type="text" class="form-control" id="people" name="people" />
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">申请单位</span>
             </div>
-
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">专家评审内容</span>
-                </div>
-                <textarea class="form-control" rows="3" id="word1" name="word1"></textarea>
+            <label for="department"></label>
+            <input type="text" class="form-control" id="department" name="department"/>
+            <div class="input-group-prepend">
+                <span class="input-group-text">联系人</span>
             </div>
+            <label for="people"></label><input type="text" class="form-control" id="people" name="people"/>
+        </div>
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">评审专家、领域等事项</span>
-                </div>
-                <textarea class="form-control" rows="3" id="word2" name="word2"></textarea>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">专家评审内容</span>
             </div>
+            <label for="word1"></label>
+            <textarea class="form-control" rows="3" id="word1" name="word1"></textarea>
+        </div>
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">组织时间</span>
-                </div>
-                <label for="name"></label>
-                <input type="datetime-local" class="form-control" id="startTime" name="startTime" placeholder="开始时间">
-                <input type="datetime-local" class="form-control" id="endTime" name="endTime" placeholder="结束时间"
-                    value="local">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">评审专家、领域等事项</span>
             </div>
+            <label for="word2"></label>
+            <textarea class="form-control" rows="3" id="word2" name="word2"></textarea>
+        </div>
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">人员分类</span>
-                </div>
-                <label for="identify"></label><select class="form-control" name="identify" id="identify">
-                    <option value="水务类">水务类</option>
-                    <option value="工程消费类">工程消费类</option>
-                    <option value="卫生健康类">卫生健康类</option>
-                    <option value="食品药品类">食品药品类</option>
-                    <option value="项目评审类">项目评审类</option>
-                    <option value="农业类">农业类</option>
-                    <option value="交通类">交通类</option>
-                    <option value="教育类">教育类</option>
-                    <option value="电力类">电力类</option>
-                    <option value="工业类">工业类</option>
-                    <option value="化工类">化工类</option>
-                    <option value="能源类">能源类</option>
-                    <option value="市政燃气类">市政燃气类</option>
-                    <option value="文物保护、勘探类">文物保护、勘探类</option>
-                    <option value="环境保护、节能审查类">环境保护、节能审查类</option>
-                </select>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">组织时间</span>
             </div>
+            <label for="name"></label>
+            <label for="startTime"></label>
+            <input type="datetime-local" class="form-control" id="startTime"
+                   name="startTime" placeholder="开始时间">
+            <label for="endTime"></label>
+            <input type="datetime-local" class="form-control" id="endTime" name="endTime"
+                   placeholder="结束时间"
+                   value="local">
+        </div>
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">抽取人数</span>
-                </div>
-                <label for="sum"></label><select class="form-control" name="sum" id="sum">
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-
-                <button type="button" class="btn btn-success" onclick="select1()">抽取</button>
-                <button type="button" class="btn btn-warning" onclick="clear()">清除</button>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">人员分类</span>
             </div>
+            <label for="identify"></label>
+            <select class="form-control" name="identify" id="identify">
+                <option value="水务类">水务类</option>
+                <option value="工程消费类">工程消费类</option>
+                <option value="卫生健康类">卫生健康类</option>
+                <option value="食品药品类">食品药品类</option>
+                <option value="项目评审类">项目评审类</option>
+                <option value="农业类">农业类</option>
+                <option value="交通类">交通类</option>
+                <option value="教育类">教育类</option>
+                <option value="电力类">电力类</option>
+                <option value="工业类">工业类</option>
+                <option value="化工类">化工类</option>
+                <option value="能源类">能源类</option>
+                <option value="市政燃气类">市政燃气类</option>
+                <option value="文物保护、勘探类">文物保护、勘探类</option>
+                <option value="环境保护、节能审查类">环境保护、节能审查类</option>
+            </select>
+        </div>
 
-            <div class="alert alert-primary" id="result">抽取结果:<span></span></div>
-
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">补充抽取人数</span>
-                </div>
-                <label for="sum2"></label><select class="form-control" name="sum2" id="sum2">
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-
-                <button type="button" class="btn btn-danger" onclick="select2()">补充抽取</button>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">抽取人数</span>
             </div>
+            <label for="sum"></label>
+            <select class="form-control" name="sum" id="sum">
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
 
-            <div class="alert alert-success" id="result2">补充抽取结果:<span></span></div>
+            <button type="button" class="btn btn-success" onclick="select('first')">抽取</button>
+            <button type="button" class="btn btn-warning" onclick="clear()">清除</button>
+        </div>
 
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">备注</span>
-                </div>
-                <label for="name"></label>
-                <label for="word3"></label><textarea class="form-control" rows="3" id="word3" name="word3"></textarea>
+        <div class="alert alert-primary" id="result">抽取结果:<span></span></div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">补充抽取人数</span>
             </div>
-        </form>
-        <button type="button" class="btn btn-warning" onclick="add()">提交</button>
-    </div>
+            <label for="sum2"></label>
+            <select class="form-control" name="sum2" id="sum2">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+            <button type="button" class="btn btn-danger" onclick="select('second')">补充抽取</button>
+        </div>
+
+        <div class="alert alert-success" id="result2">补充抽取结果:<span></span></div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">备注</span>
+            </div>
+            <label for="name"></label>
+            <label for="word3"></label>
+            <textarea class="form-control" rows="3" id="word3" name="word3"></textarea>
+        </div>
+    </form>
+    <button type="button" class="btn btn-warning" onclick="add()">提交</button>
+</div>
 </body>
 
 <script>
@@ -155,7 +166,7 @@
     function select(id) {
         const d = {}
         if (id === 'first') {
-            d['identify'] = $('#identify').val()
+            document.getElementById('result2').innerText = '补充抽取结果:'
             d['sum'] = $('#sum').val()
         }
         if (id === 'second') {
@@ -169,10 +180,10 @@
                 alert('请先抽签')
                 return
             }
-            d['identify'] = $('#identify').val()
             d['sum'] = sum
             d['text'] = text.split(':')[1]
         }
+        d['identify'] = $('#identify').val()
         $.post('/select/' + id, JSON.stringify(d), function (data) {
             if (data.code === -1) {
                 alert('暂无该类专家，请确认')

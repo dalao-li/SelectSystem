@@ -7,10 +7,11 @@ Date: 2022-01-10 10:38:26
 LastEditors: DaLao
 LastEditTime: 2022-01-18 14:24:01
 '''
+
 import datetime
 import json
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, redirect, render_template, request, url_for
 
 from controller import *
 
@@ -70,7 +71,6 @@ def upload():
 @app.route('/download/<uuid>', methods=['GET'])
 def download(uuid):
     response = download_excel(uuid)
-    # print("response", type(response))
     response.headers['Content-Type'] = "utf-8"
     response.headers["Cache-Control"] = "no-cache"
     response.headers["Content-Disposition"] = "attachment; filename=" + str(datetime.datetime.now()) + ".xlsx"

@@ -8,11 +8,15 @@ LastEditors: DaLao
 LastEditTime: 2022-03-09 19:05:42
 '''
 
-import random, os, io
+import io
+import os
+import random
+
 import xlrd
-from xlsxwriter import *
-from models import *
 from flask import make_response
+from xlsxwriter import *
+
+from models import *
 
 
 def get_random_id() -> str:
@@ -38,15 +42,16 @@ def read_excel(f):
 
         return False
 
-    f.save("static/" + f.filename)
-    e = xlrd.open_workbook("static/" + f.filename)
+    f.save(f.filename)
+    e = xlrd.open_workbook(f.filename)
     # 读取第一个sheet
     s = e.sheets()[0]
     a = []
-    # 遍历每一行
     for j in range(s.nrows):
-        # 读取这一行的数据
         i = s.row_values(j)
+        # 判断有无人员分类项
+        if len(i) < 15:
+            return {'code': -1}
         # 跳过非数据行
         if is_number(i[0]) is False:
             continue
@@ -56,12 +61,12 @@ def read_excel(f):
                 i[z] = str(int(i[z]))
             i[z].strip('\n')
             i[z].replace(" ", "")
+
         p = People(id=get_random_id(), name=i[1], sex=i[2], human_id=i[3],
                    school=i[4], department=i[5], rank=i[6], rank_id=i[7],
                    professional1=i[8], professional2=i[9], professional3=i[10], professional4=i[11],
                    professional5=i[12], phone=i[13], email=i[14], identify=i[15])
         a.append(p)
-    # 不删除直接追加
     # try:
     #     session.query(People).delete()
     #     session.commit()
@@ -72,14 +77,14 @@ def read_excel(f):
     session.add_all(a)
     session.commit()
     session.close()
-    os.remove("static/" + f.filename)
+    os.remove(f.filename)
     return {'code': 1}
 
 
-def select_people(data,status):
+def select_people(data, status):
     global code, j
-    identify, s = data.values()
-
+    identify = data['identify']
+    s = data['sum']
     p = list(session.query(People).filter(People.identify == identify))
     c = []
     if status == 'first':
@@ -122,12 +127,10 @@ def select_people(data,status):
 def add_log(data: dict) -> dict:
     name, time, department, people, word1, word2, start_time, end_time, identify, s, s2, word3, r, r2 = data.values()
 
-    print(data)
-    # 添加记录
     log = Log(id=get_random_id(), name=name, time=time, department=department,
-              people=people,word1=word1,word2=word2,startTime=start_time,
-              endTime=end_time,identify=identify,sum=s,human=r,
-              sum2=s2,human2=r2,word3=word3)
+              people=people, word1=word1, word2=word2, startTime=start_time,
+              endTime=end_time, identify=identify, sum=s, human=r,
+              sum2=s2, human2=r2, word3=word3)
     session.add(log)
     session.commit()
     session.close()
@@ -157,7 +160,7 @@ def del_log(uuid: str):
         session.commit()
         session.close()
         return {'code': -1}
-    log = session.query(Log).filter(Log.id == id)[0]
+    log = session.query(Log).filter(Log.id == uuid)[0]
     session.delete(log)
     session.commit()
     session.close()
@@ -170,6 +173,7 @@ def del_info():
     session.close()
     return {'code': 1}
 
+
 def get_all_log():
     return session.query(Log).all()
 
@@ -178,7 +182,7 @@ def get_people():
     return session.query(People).all()
 
 
-def get_info(id):
+def get_info(id) -> dict:
     p = session.query(People).filter(People.id == id)[0]
     data = {
         '姓名: ': p.name,
@@ -201,8 +205,7 @@ def get_info(id):
     return data
 
 
-
-def get_log(id):
+def get_log(id) -> dict:
     p = session.query(Log).filter(Log.id == id)[0]
     data = {
         '事项名称: ': p.name,
