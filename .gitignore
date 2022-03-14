@@ -6,3 +6,4 @@ Info.db
 /build
 /dist
 app.spec
+flask.log
