@@ -26,56 +26,58 @@
 </head>
 
 <body>
-    <div id="full" class="d-flex mb-1">
-        <button type="button" class="btn btn-danger flex-fill me-1 btn-lg" onclick="a('index')">开始抽签</button>
-        <button type="button" class="btn btn-warning flex-fill me-1 btn-lg" onclick="a('data')">导入数据</button>
-        <button type="button" class="btn btn-primary flex-fill btn-lg" onclick="a('log')">抽签记录</button>
-        <button type="button" class="btn btn-success flex-fill btn-lg" onclick="a('')">退出登陆</button>
+<div id="full" class="d-flex mb-1">
+    <button type="button" class="btn btn-danger flex-fill me-1 btn-lg" onclick="a('index')">开始抽签</button>
+    <button type="button" class="btn btn-warning flex-fill me-1 btn-lg" onclick="a('data')">导入数据</button>
+    <button type="button" class="btn btn-primary flex-fill btn-lg" onclick="a('log')">抽签记录</button>
+    <button type="button" class="btn btn-success flex-fill btn-lg" onclick="a('')">退出登陆</button>
+</div>
+<div class="container">
+    <div class="alert alert-success">
+        <strong>注意!</strong> 请确认Excel文件的表头格式如下图所示！
     </div>
-    <div class="container">
-        <!-- <div class="input-group mb-3">
-            <div class="alert alert-danger">注意!新上传的文件会覆盖之前的数据</div>
-        </div> -->
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">批量上传，仅限Excel</span>
-            </div>
-            <label for="name"></label>
-            <input id="file" class="btn btn-info" name="file" type="file" />
-            <button type="button" onclick="upload()" class="btn btn-success">提交</button>
-        </div>
-
-        <div class="input-group mb-3">
-            <button type="button" onclick="del()" class="btn btn-danger">清空全部数据</button>
-        </div>
-
-        <div>
-            <table class="table table-hover" id="infoTable">
-                <thead>
-                    <tr>
-                        <th>序号</th>
-                        <th>姓名</th>
-                        <th>性别</th>
-                        <th>工作单位</th>
-                        <th>类别</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for i in data %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ i.name }}</td>
-                        <td>{{ i.sex }}</td>
-                        <td>{{ i.department }}</td>
-                        <td>{{ i.identify }}</td>
-                        <td><button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <div class="input-group mb-3">
+        <img src="/static/上传格式.png" class="rounded" alt="Cinque Terre" style="width:100%">
     </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">批量上传，仅限Excel</span>
+        </div>
+        <label for="name"></label>
+        <input id="file" class="btn btn-info" name="file" type="file"/>
+        <button type="button" onclick="upload()" class="btn btn-success">提交</button>
+        <button type="button" onclick="del()" class="btn btn-danger">清空全部数据</button>
+    </div>
+
+    <div>
+        <table class="table table-hover" id="infoTable">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>工作单位</th>
+                <th>类别</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.sex }}</td>
+                    <td>{{ i.department }}</td>
+                    <td>{{ i.identify }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 
 <script src="{{ url_for('static',filename='bootstrap-table-zh-CN.min.js') }}"></script>
@@ -91,10 +93,13 @@
     }
 
     function del() {
-        $.get('/del/people/all', function () {
-            alert("清空成功")
-            location.reload()
-        })
+        const msg = "确认全部删除吗？\n\n请确认！"
+        if (confirm(msg)) {
+            $.get('/del/people/all', function () {
+                alert("清空成功")
+                location.reload()
+            })
+        }
     }
 
     function upload() {
