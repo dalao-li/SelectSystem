@@ -20,7 +20,7 @@ from models import *
 
 
 def get_random_id() -> str:
-    a = 'abcdefghijklmnopqrstuvwxyz123456'
+    a = 'abcdefghijklmnopqrstuvwxyz1234567890'
     return ''.join(random.sample(a, 32))
 
 
