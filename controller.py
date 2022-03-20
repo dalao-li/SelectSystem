@@ -11,7 +11,7 @@ LastEditTime: 2022-03-09 19:05:42
 import io
 import os
 import random
-
+import unicodedata
 import xlrd
 from flask import make_response
 from xlsxwriter import *
@@ -32,14 +32,11 @@ def read_excel(f):
             return True
         except ValueError:
             pass
-
         try:
-            import unicodedata
             unicodedata.numeric(s)
             return True
         except (TypeError, ValueError):
             pass
-
         return False
 
     f.save(f.filename)
@@ -47,36 +44,32 @@ def read_excel(f):
     # 读取第一个sheet
     s = e.sheets()[0]
     a = []
+    # 检验格式
+    # ['序号', '姓名', '性别', '身份证号', '毕业院校及所学专业', '工作单位', '职  称', '职称证件编号', '专  业', '', '', '', '', '联系电话', '电子信箱', '专家类别']
+    if len(s.row_values(1)) != 16:
+        return {'code': -1}
     for j in range(s.nrows):
         i = s.row_values(j)
-        # 判断有无人员分类项
-        if len(i) < 15:
-            return {'code': -1}
         # 跳过非数据行
         if is_number(i[0]) is False:
             continue
         # 将float数据转为str
-        for z in range(len(i)):
-            if isinstance(i[z], float):
-                i[z] = str(int(i[z]))
-            i[z].strip('\n')
-            i[z].replace(" ", "")
+        for k in i:
+            if isinstance(k, float):
+                k = str(int(k))
+            k.strip('\n').replace(" ", "")
 
         p = People(id=get_random_id(), name=i[1], sex=i[2], human_id=i[3],
                    school=i[4], department=i[5], rank=i[6], rank_id=i[7],
                    professional1=i[8], professional2=i[9], professional3=i[10], professional4=i[11],
                    professional5=i[12], phone=i[13], email=i[14], identify=i[15])
         a.append(p)
-    # try:
-    #     session.query(People).delete()
-    #     session.commit()
-    #     session.close()
-    # except:
-    #     session.rollback()
-
-    session.add_all(a)
-    session.commit()
-    session.close()
+    try:
+        session.add_all(a)
+        session.commit()
+        session.close()
+    except:
+        session.rollback()
     os.remove(f.filename)
     return {'code': 1}
 
