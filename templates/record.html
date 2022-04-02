@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>灵石县行政审批服务管理局-专家库系统</title>
+
+    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap-table.min.css') }}">
+    <script src="{{ url_for('static',filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='popper.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='bootstrap-table.min.js') }}"></script>
+</head>
+<body>
+<div class="container">
+        <div>
+            <table class="table table-hover" id="infoTable">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>uuid</th>
+                        <th>IP</th>
+                        <th>操作</th>
+                        <th>时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in data %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <th>{{ i.id }}</th>
+                        <td>{{ i.ip }}</td>
+                        <td>{{ i.name }}</td>
+                        <td>{{ i.time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

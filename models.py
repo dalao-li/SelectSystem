@@ -47,6 +47,14 @@ class People(Base):
     email = Column(String(32))
     identify = Column(String(32))
 
+
+class Record(Base):
+    __tablename__ = 'Record'
+    id = Column(String(32), primary_key=True)
+    ip = Column(String(32))
+    name = Column(String(32))
+    time = Column(String(32))
+
 sqlite_url = 'sqlite:///Info.db?check_same_thread=False'
 
 # 创建引擎

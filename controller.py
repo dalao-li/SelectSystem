@@ -1,3 +1,4 @@
+import datetime
 import io
 import os
 import random
@@ -9,9 +10,20 @@ from xlsxwriter import *
 from models import *
 
 
-def get_random_id() -> str:
-    a = 'abcdefghijklmnopqrstuvwxyz1234567890'
+def uuid() -> str:
+    a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
     return ''.join(random.sample(a, 32))
+
+
+def record_log(ip , name):
+    log = Record(id=uuid(), ip=ip, name=name,time=str(datetime.datetime.now()))
+    session.add(log)
+    session.commit()
+    session.close()
+
+
+def get_login_log():
+    return session.query(Record).all()
 
 
 # 读取上传的excel
@@ -49,7 +61,7 @@ def read_excel(f):
                 k = str(int(k))
             k.strip('\n').replace(" ", "")
 
-        p = People(id=get_random_id(), name=i[1], sex=i[2], human_id=i[3],
+        p = People(id=uuid(), name=i[1], sex=i[2], human_id=i[3],
                    school=i[4], department=i[5], rank=i[6], rank_id=i[7],
                    professional1=i[8], professional2=i[9], professional3=i[10], professional4=i[11],
                    professional5=i[12], phone=i[13], email=i[14], identify=i[15])
@@ -110,7 +122,7 @@ def select_people(data, status):
 def add_log(data: dict) -> dict:
     name, time, department, people, word1, word2, start_time, end_time, identify, s, s2, word3, r, r2 = data.values()
 
-    log = Log(id=get_random_id(), name=name, time=time, department=department,
+    log = Log(id=uuid(), name=name, time=time, department=department,
               people=people, word1=word1, word2=word2, startTime=start_time,
               endTime=end_time, identify=identify, sum=s, human=r,
               sum2=s2, human2=r2, word3=word3)
