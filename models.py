@@ -1,13 +1,3 @@
-'''
-Description: 
-Version: 1.0
-Author: DaLao
-Email: dalao_li@163.com
-Date: 2021-12-31 22:25:53
-LastEditors: DaLao
-LastEditTime: 2022-01-18 03:58:44
-'''
-
 from sqlalchemy import Column, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker

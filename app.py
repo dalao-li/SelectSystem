@@ -1,18 +1,8 @@
-'''
-Description: 
-Version: 1.0
-Author: DaLao
-Email: dalao_li@163.com
-Date: 2022-01-10 10:38:26
-LastEditors: DaLao
-LastEditTime: 2022-01-18 14:24:01
-'''
-
 import datetime
 import json
 
 from flask import Flask, redirect, render_template, request, url_for
-
+from werkzeug.middleware.proxy_fix import ProxyFix
 from controller import *
 
 app = Flask(__name__)
@@ -20,8 +10,10 @@ app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def login_page():
+    ip = request.remote_addr
+    print(ip)
     if request.method == 'GET':
-        return render_template('login.html', status=1)
+        return render_template('login.html', status=1,ip=ip)
     if request.method == 'POST':
         name = request.form.get("name")
         pwd = request.form.get("pwd")
