@@ -4,8 +4,8 @@ import os
 import random
 import unicodedata
 import xlrd
+import xlsxwriter
 from flask import make_response
-from xlsxwriter import *
 
 from models import *
 
@@ -15,8 +15,8 @@ def uuid() -> str:
     return ''.join(random.sample(a, 32))
 
 
-def record_log(ip , name):
-    log = Record(id=uuid(), ip=ip, name=name,time=str(datetime.datetime.now()))
+def record_log(ip, name):
+    log = Record(id=uuid(), ip=ip, name=name, time=str(datetime.datetime.now()))
     session.add(log)
     session.commit()
     session.close()
@@ -135,7 +135,7 @@ def add_log(data: dict) -> dict:
 # 下载抽签记录
 def download_excel(uuid: str):
     fp = io.BytesIO()
-    b = Workbook(fp, {'in_memory': True})
+    b = xlsxwriter.Workbook(fp, {'in_memory': True})
     s = b.add_worksheet('Sheet1')
     data = get_log(uuid)
     s.write_row('A1', list(data.keys()))

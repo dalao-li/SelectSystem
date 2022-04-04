@@ -4,5 +4,6 @@
 /build
 /dist
 Info.db
-.dockerigonre
+.dockerignore
 .gitignore
+Dockerfile

@@ -26,42 +26,42 @@
 </head>
 
 <body>
-    <div id="full" class="d-flex mb-1">
-        <button type="button" class="btn btn-danger flex-fill me-1 btn-lg" onclick="a('index')">开始抽签</button>
-        <button type="button" class="btn btn-warning flex-fill me-1 btn-lg" onclick="a('data')">导入数据</button>
-        <button type="button" class="btn btn-primary flex-fill btn-lg" onclick="a('log')">抽签记录</button>
-        <button type="button" class="btn btn-success flex-fill btn-lg" onclick="a('')">退出登陆</button>
+<div id="full" class="d-flex mb-1">
+    <button type="button" class="btn btn-danger flex-fill me-1 btn-lg" onclick="a('index')">开始抽签</button>
+    <button type="button" class="btn btn-warning flex-fill me-1 btn-lg" onclick="a('data')">导入数据</button>
+    <button type="button" class="btn btn-primary flex-fill btn-lg" onclick="a('log')">抽签记录</button>
+    <button type="button" class="btn btn-success flex-fill btn-lg" onclick="a('')">退出登陆</button>
+</div>
+<div class="container">
+    <div>
+        <table class="table table-hover" id="infoTable">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>事项名称</th>
+                <th>受理时间</th>
+                <th>申请单位</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in data %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.time }}</td>
+                    <td>{{ i.department }}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button>
+                        <button type="button" class="btn btn-success" id="{{ i.id }}" onclick=download()>下载</button>
+                        <button type="button" class="btn btn-danger" id="{{ i.id }}" onclick=del()>删除</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <div class="container">
-        <div>
-            <table class="table table-hover" id="infoTable">
-                <thead>
-                    <tr>
-                        <th>序号</th>
-                        <th>事项名称</th>
-                        <th>受理时间</th>
-                        <th>申请单位</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for i in data %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ i.name }}</td>
-                        <td>{{ i.time }}</td>
-                        <td>{{ i.department }}</td>
-                        <td>
-                            <button type="button" class="btn btn-primary" id="{{ i.id }}" onclick=get()>查看</button>
-                            <button type="button" class="btn btn-success" id="{{ i.id }}" onclick=download()>下载</button>
-                            <button type="button" class="btn btn-danger" id="{{ i.id }}" onclick=del()>删除</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
+</div>
 </body>
 
 <script src="{{ url_for('static',filename='bootstrap-table-zh-CN.min.js') }}"></script>
