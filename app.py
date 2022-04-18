@@ -10,7 +10,6 @@ app = Flask(__name__)
 def login_page():
     ip = request.remote_addr
     if request.method == 'GET':
-        record_log(ip, '访问登陆页面')
         return render_template('login.html', status=1, ip=ip)
     if request.method == 'POST':
         name = request.form.get("name")
