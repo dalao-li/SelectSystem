@@ -10,13 +10,18 @@ from flask import make_response
 from models import *
 
 
-def uuid() -> str:
+def uuid()-> str:
     a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'
     return ''.join(random.sample(a, 32))
 
 
-def record_log(ip, name):
-    log = Record(id=uuid(), ip=ip, name=name, time=str(datetime.datetime.now()))
+def record_log(ip, name)->None:
+    log = Record(
+        id = uuid(),
+        ip = ip,
+        name = name,
+        time = str(datetime.datetime.now())
+    )
     session.add(log)
     session.commit()
     session.close()
@@ -61,10 +66,24 @@ def read_excel(f):
                 k = str(int(k))
             k.strip('\n').replace(" ", "")
 
-        p = People(id=uuid(), name=i[1], sex=i[2], human_id=i[3],
-                   school=i[4], department=i[5], rank=i[6], rank_id=i[7],
-                   professional1=i[8], professional2=i[9], professional3=i[10], professional4=i[11],
-                   professional5=i[12], phone=i[13], email=i[14], identify=i[15])
+        p = People(
+            id = uuid(),
+            name = i[1],
+            sex = i[2],
+            human_id = i[3],
+            school = i[4],
+            department = i[5],
+            rank = i[6],
+            rank_id = i[7],
+            professional1 = i[8],
+            professional2 = i[9],
+            professional3 = i[10],
+            professional4 = i[11],
+            professional5 = i[12],
+            phone = i[13],
+            email = i[14],
+            identify = i[15]
+        )
         a.append(p)
     try:
         session.add_all(a)
@@ -76,6 +95,8 @@ def read_excel(f):
     return {'code': 1}
 
 
+# status == first 首次
+# status == second 补充
 def select_people(data, status):
     global code, j
     identify = data['identify']
@@ -122,10 +143,23 @@ def select_people(data, status):
 def add_log(data: dict) -> dict:
     name, time, department, people, word1, word2, start_time, end_time, identify, s, s2, word3, r, r2 = data.values()
 
-    log = Log(id=uuid(), name=name, time=time, department=department,
-              people=people, word1=word1, word2=word2, startTime=start_time,
-              endTime=end_time, identify=identify, sum=s, human=r,
-              sum2=s2, human2=r2, word3=word3)
+    log = Log(
+        id = uuid(),
+        name = name,
+        time = time,
+        department = department,
+        people = people,
+        word1 = word1,
+        word2 = word2,
+        startTime = start_time,
+        endTime = end_time,
+        identify = identify,
+        sum = s,
+        human = r,
+        sum2 = s2,
+        human2 = r2,
+        word3 = word3
+    )
     session.add(log)
     session.commit()
     session.close()
@@ -138,8 +172,10 @@ def download_excel(uuid: str):
     b = xlsxwriter.Workbook(fp, {'in_memory': True})
     s = b.add_worksheet('Sheet1')
     data = get_log(uuid)
+    # 第一行写标题
     s.write_row('A1', list(data.keys()))
     x = 65
+    # A2 B2 C2...写实际书记
     for v in data.values():
         s.write(chr(x) + '2', v)
         x += 1
@@ -177,7 +213,7 @@ def get_people():
     return session.query(People).all()
 
 
-def get_info(id) -> dict:
+def get_info(id)-> dict:
     p = session.query(People).filter(People.id == id)[0]
     data = {
         '姓名: ': p.name,
@@ -196,11 +232,10 @@ def get_info(id) -> dict:
         '邮件: ': p.email,
         '类别: ': p.identify
     }
-
     return data
 
 
-def get_log(id) -> dict:
+def get_log(id)-> dict:
     p = session.query(Log).filter(Log.id == id)[0]
     data = {
         '事项名称: ': p.name,
@@ -217,5 +252,4 @@ def get_log(id) -> dict:
         '补抽名单: ': p.human2,
         '备注: ': p.word3,
     }
-
     return data

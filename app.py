@@ -9,6 +9,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def login_page():
     ip = request.remote_addr
+
     if request.method == 'GET':
         return render_template('login.html', status=1, ip=ip)
     if request.method == 'POST':
